@@ -1,0 +1,307 @@
+% Format teze zasnovan je na paketu memoir
+% http://tug.ctan.org/macros/latex/contrib/memoir/memman.pdf ili
+% http://texdoc.net/texmf-dist/doc/latex/memoir/memman.pdf
+% 
+% Prilikom zadavanja klase memoir, navedenim opcijama se podešava 
+% veličina slova (12pt) i jednostrano štampanje (oneside).
+% Ove parametre možete menjati samo ako pravite nezvanične verzije
+% mastera za privatnu upotrebu (na primer, u b5 varijanti ima smisla 
+% smanjiti 
+\documentclass[12pt,oneside]{memoir}
+
+% Paket koji definiše sve specifičnosti mastera Matematičkog fakulteta
+\usepackage{matfmaster}
+%
+% Podrazumevano pismo je ćirilica.
+%   Ako koristite pdflatex, a ne xetex, sav latinički tekst na srpskom jeziku
+%   treba biti okružen sa \lat{...} ili \begin{latinica}...\end{latinica}.
+%
+% Opicija [latinica]:
+%   ako želite da pišete latiniciom, dodajte opciju "latinica" tj.
+%   prethodni paket uključite pomoću: \usepackage[latinica]{matfmaster}.
+%   Ako koristite pdflatex, a ne xetex, sav ćirilički tekst treba biti
+%   okružen sa \cir{...} ili \begin{cirilica}...\end{cirilica}.
+%
+% Opcija [biblatex]:
+%   ako želite da koristite reference na više jezika i umesto paketa
+%   bibtex da koristite BibLaTeX/Biber, dodajte opciju "biblatex" tj.
+%   prethodni paket uključite pomoću: \usepackage[biblatex]{matfmaster}
+%
+% Opcija [b5paper]:
+%   ako želite da napravite verziju teze u manjem (b5) formatu, navedite
+%   opciju "b5paper", tj. prethodni paket uključite pomoću: 
+%   \usepackage[b5paper]{matfmaster}. Tada ima smisla razmisliti o promeni
+%   veličine slova (izmenom opcije 12pt na 11pt u \documentclass{memoir}).
+%
+% Naravno, opcije je moguće kombinovati.
+% Npr. \usepackage[b5paper,biblatex]{matfmaster}
+
+% Pomoćni paket koji generiše nasumičan tekst u kojem se javljaju sva slova
+% azbuke (nema potrebe koristiti ovo u pravim disertacijama)
+\usepackage{pangrami}
+
+% Paket koji obezbeđuje ispravni prikaz ćiriličkih italik slova kada
+% se koristi pdflatex. Zakomentarisati ako na sistemu koji koristite ovaj
+% paket nije dostupan ili ako ne radi ispravno.
+%\usepackage{cmsrb}
+
+% Ostali paketi koji se koriste u dokumentu
+\usepackage{listings} % listing programskog koda
+
+% Datoteka sa literaturom u BibTex tj. BibLaTeX/Biber formatu
+\bib{matfmaster-primer}
+
+% Ime kandidata na srpskom jeziku (u odabranom pismu)
+\autor{Филип Лазић}
+% Naslov teze na srpskom jeziku (u odabranom pismu)
+\naslov{Оптимизација целовитог програма на компајлерској инфраструктури LLVM}
+% Godina u kojoj je teza predana komisiji
+\godina{2021}
+% Ime i afilijacija mentora (u odabranom pismu)
+\mentor{др Иван \textsc{Чукић}, редован професор\\ Универзитет у Београду, Математички факултет}
+% Ime i afilijacija prvog člana komisije (u odabranom pismu)
+\komisijaA{др Милена \textsc{Вујошевић}, ванредни професор\\ Универзитет у Београду, Математички факултет}
+% Ime i afilijacija drugog člana komisije (u odabranom pismu)
+\komisijaB{др Саша \textsc{Малков}, доцент\\ Универзитет у Београду, Математички факултет}
+% Ime i afilijacija trećeg člana komisije (opciono)
+% \komisijaC{}
+% Ime i afilijacija četvrtog člana komisije (opciono)
+% \komisijaD{}
+% Datum odbrane (obrisati ili iskomentarisati narednu liniju ako datum odbrane nije poznat)
+\datumodbrane{15. јануар 2016.}
+
+% Apstrakt na srpskom jeziku (u odabranom pismu)
+\apstr{%
+}
+
+% Ključne reči na srpskom jeziku (u odabranom pismu)
+%\kljucnereci{анализа, геометрија, алгебра, логика, рачунарство, астрономија}
+
+\begin{document}
+% ==============================================================================
+% Uvodni deo teze
+\frontmatter
+% ==============================================================================
+% Naslovna strana
+\naslovna
+% Strana sa podacima o mentoru i članovima komisije
+\komisija
+% Strana sa posvetom (u odabranom pismu)
+\posveta{Мами, тати и деди}
+% Strana sa podacima o disertaciji na srpskom jeziku
+%\apstrakt
+% Sadržaj teze
+\tableofcontents*
+
+% ==============================================================================
+% Glavni deo teze
+\mainmatter
+% ==============================================================================
+
+% ------------------------------------------------------------------------------
+\chapter{Увод}
+% ------------------------------------------------------------------------------
+% ------------------------------------------------------------------------------
+\chapter{LLVM компајлерска инфраструктура}
+\label{chp:LLVM}
+% ------------------------------------------------------------------------------
+
+LLVM({\lat Low Level Virtual Machine}[1]), упркос свом имену LLVM мало тога има са
+виртуелним машинама, то је колекција алата(компајлера, асемблера, дибагера, линкера)
+који су дизајнирани да буду компатибилни са постојећим алатима пре свега на 
+Unix системима.
+Ови алати  се могу користити за развој front-end-a за било који програмски језик, 
+као и за развој back-end-a за сваку компјутерску архитектуру.
+LLVM је започет као истраживачки пројекат на Универзитету Илиноис са циљем да 
+пружи статичку и динамичку компилацију програмских језика. 
+Данас, LLVM садржи велики број подпројеката који се користе у великом обиму 
+што у продукцијске што у истраживачке сврхе.
+\newline Неки од најбитнијих подпројеката су:
+\begin{enumerate}
+\item Језгро LLVM-a које садржи све потребне алате и библиотеке за конверзију
+међурепрезентације у објектне фајлове 
+\item Clang - front-end за  C, C++ и Objective C програмске језике
+\item libc++ - имплементација C++ стандардне библиотеке
+\item LLDB - дибагер
+\item LLD - линкер
+\end{enumerate}
+
+\section{LLVM међурепрезентација}
+LLVM међурепрезентација (LLVM IR[2]) базирана je на статичкој 
+јединственој форми доделе(SSA[3]).
+Ова форма захтева да се свакој променљивој вредност додели тачно једном, као и да
+свака променљива буде дефинисана пре употребе.
+LLVM међурепрезентација је дизајнирана тако да подржи интерпроцедуралне оптимизације,
+анализу целог програма, агресивно реструктуирање програма итд.
+Веома битан аспект LLVM међурепрезентацијe је то што је она дефинисана као 
+језик са јасно дефинисаном семантиком.
+Ова међурепрезентација се може користити у три различите форме: 
+\begin{enumerate}
+\item текстуални асемблерски формат(.ll)
+\item биткод  формат (.bc)
+\item унутар-меморијски формат 
+\end{enumerate} 
+Овим се омогућавају ефикасне компајлерске транформације и анализе, уз могућност
+визуалне анализе и дебаговања трансформација. 
+Сва три формата су еквивалентна и лако се могу трансформисати један у други без
+губитка информација. 
+У овом раду највише ћемо се фокусирати на текстуални формат и под међурепрезентацијом
+подразумевано ћемо мислити на овај формат, који се може окарактерисати као асемблерски 
+језик независтан од специфичне платформе.
+
+Овде видимо две функције у програмском језику С које сабирају 2 броја.
+\begin{lstlisting}
+unsigned add1(unsigned a, unsigned b) {
+  return a+b;
+}
+// Rekurzivna funkcija za sabiranje 2 broja.
+unsigned add2(unsigned a, unsigned b) {
+  if (a == 0) return b;
+  return add2(a-1, b+1);
+}
+\end{lstlisting}
+
+Сада ћемо представити одговајући к\^{o}д у LLVM међурепрезентацији.
+\begin{lstlisting}
+define i32 @add1(i32 %a, i32 %b) {
+entry:
+  %tmp1 = add i32 %a, %b
+  ret i32 %tmp1
+}
+
+define i32 @add2(i32 %a, i32 %b) {
+entry:
+  %tmp1 = icmp eq i32 %a, 0
+  br i1 %tmp1, label %done, label %recurse
+
+recurse:
+  %tmp2 = sub i32 %a, 1
+  %tmp3 = add i32 %b, 1
+  %tmp4 = call i32 @add2(i32 %tmp2, i32 %tmp3)
+  ret i32 %tmp4
+
+done:
+  ret i32 %b
+}
+\end{lstlisting}
+
+LLVM међурепрезентација је асемблерски формат сличан апстрактном RISC[4] скупу
+инструкција, са додатним структурама вишег нивоа.
+
+Као што видимо у овом примеру, међурепрезентација подржава линеарне секвенце
+једноставних инструкција као што су сабирање, одузимање, гранање, упоређивање итд.
+Све ове инструкције су у тро-адресној форми, што значи да могу примити два регистра 
+као улаз и резултат уписати у трећем регистру.
+Међурепрезентација је строго типизирана (на пример i32 означава тридесетдвобитни
+целобројни број), док се позив функције означава кључном речи call, а повратна
+вредност са ret.
+LLVM не користи фиксан број регистара, већ има бесконачан број променљивих које
+почињу карактером \%. 
+Функције и глобалне променљиве пре свог назива садрже карактер @.
+Унутар репрезентације постоје и лабеле, тело сваке функције почиње лабелом begin.
+
+\section{LLVM компајлер}  
+
+Процес компилације у LLVM инфраструктури започиње у front-end делу који производи
+међурепрезентацију, која се затим шаље алату за оптимизацију који трансформише
+к\^{o}д кроз велики број оптимизација.
+Потом се трансформисани к\^{o}д преводи у асемблерски к\^{o}д на жељеној архитектури, 
+и на крају се асемблерски к\^{o}д преводи у машински. 
+Овај процес, наравно поједностављен, можемо видети на слици испод. 
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.8\textwidth]{LLVMCompiler1.png}
+  \caption{LLVM процес компилације}
+  \label{fig:grafikon}
+\end{figure}
+
+\subsection{Frond-end}
+ Frond-end је задужен за парсирање, валидацију и проналазак грешака у изворном
+ к\^{o}ду, затим за превођење парсираног к\^{o}да у LLVM међурепрезентацију.
+ Превођење се обично извршава, прво изградњом AST-а[5], а затим 
+ и превођењем AST-а у међурепрезентацију.
+ У суштини сваки програмски језик, уколико имплементира front-end који може да
+ изгенерише LLVM међурепрезентацију, може користити алат за оптимизацију или 
+ back-end део LLVM-а.
+ Постоји више пројеката који имплементирају LLVM front-end, али најбитнији су:
+ 
+ \begin{enumerate}
+ \item Clang - front-end за  C, C++ и Objective C програмске језике
+ \item DragonEgg - GCC плагин који користи LLVM архитектуру за оптимизацију и 
+ 				 и генерисање машинског кода
+ \end{enumerate}
+
+ \subsection{Алат за оптимизацију}
+ Алат за оптимизацију (eng. optimizer[6]) дизајниран је тако да на улазу прима LLVM
+ међурепрезентацију, изврши оптимизације над међурепрезентацијом и после тога генерише
+ измењену међурепрезентацију, која би требало да се извршава брже.
+ Овај алат је организован у више низова оптимизациних пролаза, тако да је излаз
+ једне оптимизације улаз у другу.
+ Неки од примера оптимизационих пролаза су инлајновање, елиминација мртвог кода,
+ реалокација израза, инваријација петљи итд. 
+ Од нивоа оптимизације зависе и оптимизациони пролази који ће бити покренути,
+ на пример, у случају Clang-a, на нивоу -O0 нема оптимизација, док на нивоу
+ -O3 покреће се свих 67 оптимизационих пролаза.
+ Алат за оптимизацију се може покренути командом opt.
+
+\subsection{Back-end} 
+LLVM back-end је фаза у којој се од међурепрезентације, која је улаз за ову фазу,
+генерише машински к\^{o}д за специфичну архитектуру.
+Главна компонента back-end-а је генератор к\^{o}да (eng. LLVM code generator[7]) који
+користи сличан приступ као алат за оптимизацију, то јест дели генерисање машинског
+к\^{o}дa на мање пролазе, који имају за циљ генерисање најбољег могућег к\^{o}да.
+Неки најбитнији пролази су бирање инструкција, алокација регистара, распоређивање
+(eng. scheduling).
+LLVM може генерисати код за велики број архитектура, неки од њих су: x86, ARM,
+PowerPC, SPARC.
+
+\section{Предности LLVM-a}
+
+LLVM пројекат је бесплатан и његов изворни к\^{o}д је у потпуности доступан, 
+што је навело не само истраживаче са универзитета, већ и велики број компанија 
+да учествују у његовом развоју, тако да данас значајан број људи активно 
+учествује у одржавању и унапређивању овог пројекта.
+Модуларни дизајн омогућава лако мењање постојећих алата или додавање нових.
+Захваљујући овом дизајну врло лако је додати нови front-end, back-end или
+оптимизациони пролаз.
+Такође, LLVM подржава и:
+\begin{enumerate}
+\item JIT компилацију[8]
+\item Clang-ов алат за статичку анализу к\^{o}да (eng. static code analyzer[9]) 
+- који служи за  проналазак могућих грешака у коду
+\item оптимизацију током линковања(LTO[10])
+\end{enumerate}
+ Очекује се да LLVM у потпуности замени GCC у блиској будућности.
+
+% ------------------------------------------------------------------------------
+\chapter{Закључак}
+% ------------------------------------------------------------------------------
+
+
+
+% ==============================================================================
+% Završni deo teze i prilozi
+\backmatter
+% ==============================================================================
+\chapter{Литература}
+[1] LLVM Compiler Infrastructure -- https://llvm.org/docs/index.html \\
+
+[2] LLVM Language Reference Manual -- https://llvm.org/docs/LangRef.html \\
+
+[3] SSA Form -- https://en.wikipedia.org/wiki/Static{\_}single{\_}assignment{\_}form \\
+ 
+[4] RISC -- https://en.wikipedia.org/wiki/Reduced{\_}instruction{\_}set{\_}computer \\
+
+[5] Abstract Syntax tree -- https://en.wikipedia.org/wiki/Abstract{\_}syntax{\_}tree \\
+
+[6] Optimizer -- https://llvm.org/docs/CommandGuide/opt.html \\
+
+[7] LLVM Code Generator -- https://llvm.org/docs/CodeGenerator.html \\
+
+[8] Just In Time Compilation  -- https://en.wikipedia.org/wiki/Just-in-time{\_}compilation \\
+
+[9] Clang Static Code Analyzer  -- https://clang-analyzer.llvm.org/ \\ 
+
+[10] Link Time Optimization -- https://llvm.org/docs/LinkTimeOptimization.html
+\end{document} 
