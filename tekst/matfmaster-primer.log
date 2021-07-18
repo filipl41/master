@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2021.5.30)  1 JUL 2021 23:15
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2021.5.30)  18 JUL 2021 20:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1178,7 +1178,11 @@ Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
 Package csquotes Info: Redefining alias 'default' -> 'serbianc'.
 
-(./matfmaster-primer.aux)
+(./matfmaster-primer.aux
+
+LaTeX Warning: Label `fig:grafikon' multiply defined.
+
+)
 \openout1 = `matfmaster-primer.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 80.
@@ -1199,8 +1203,7 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 80.
 LaTeX Font Info:    ... okay on input line 80.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 80.
 LaTeX Font Info:    ... okay on input line 80.
-
-(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+ (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count170
 \scratchdimen=\dimen162
@@ -1273,7 +1276,7 @@ LaTeX Font Warning: Font shape `T2A/fos/m/n' undefined
 LaTeX Font Warning: Font shape `T2A/fos/m/n' in size <16> not available
 (Font)              size <17.28> substituted on input line 86.
 
-<matf.png, id=32, 346.29375pt x 409.53pt>
+<matf.png, id=40, 346.29375pt x 409.53pt>
 File: matf.png Graphic file (type png)
 <use matf.png>
 Package pdftex.def Info: matf.png  used on input line 86.
@@ -1318,89 +1321,97 @@ Overfull \hbox (11.7279pt too wide) in paragraph at lines 188--190
  []
 
 [4]
-<LLVMCompiler1.png, id=126, 560.0925pt x 206.7725pt>
+<LLVMCompiler1.png, id=136, 560.0925pt x 206.7725pt>
 File: LLVMCompiler1.png Graphic file (type png)
 <use LLVMCompiler1.png>
 Package pdftex.def Info: LLVMCompiler1.png  used on input line 214.
 (pdftex.def)             Requested size: 340.8013pt x 125.82184pt.
- [5 <./LLVMCompiler1.png>] [6] [7
+ [5 <./LLVMCompiler1.png>] [6]
+<LTO.png, id=157, 771.88374pt x 150.5625pt>
+File: LTO.png Graphic file (type png)
+<use LTO.png>
+Package pdftex.def Info: LTO.png  used on input line 301.
+(pdftex.def)             Requested size: 340.8013pt x 66.47513pt.
+ [7
+
+] [8 <./LTO.png>] [9
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 288--289
+Underfull \hbox (badness 10000) in paragraph at lines 340--341
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 290--291
+Underfull \hbox (badness 10000) in paragraph at lines 342--343
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 292--293
+Underfull \hbox (badness 10000) in paragraph at lines 344--345
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 294--295
+Underfull \hbox (badness 10000) in paragraph at lines 346--347
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 296--297
+Underfull \hbox (badness 10000) in paragraph at lines 348--349
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 298--299
+Underfull \hbox (badness 10000) in paragraph at lines 350--351
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 300--301
+Underfull \hbox (badness 10000) in paragraph at lines 352--353
 
  []
 
 
-Overfull \hbox (37.55037pt too wide) in paragraph at lines 302--303
+Overfull \hbox (37.55037pt too wide) in paragraph at lines 354--355
 []\T2A/cmr/m/n/12 [8] Just In Time Compilation -- https://en.wikipedia.org/wiki
 /Just-in-time_compilation 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 302--303
+Underfull \hbox (badness 10000) in paragraph at lines 354--355
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 304--305
+Underfull \hbox (badness 10000) in paragraph at lines 356--357
 
  []
 
 
-Overfull \hbox (9.75293pt too wide) in paragraph at lines 306--307
+Overfull \hbox (9.75293pt too wide) in paragraph at lines 358--359
 []\T2A/cmr/m/n/12 [10] Link Time Optimization -- https://llvm.org/docs/LinkTime
 Optimization.html
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 306--307
+Underfull \hbox (badness 10000) in paragraph at lines 358--359
 
  []
 
-[8
+[10
 
 
 ]
 \tf@toc=\write5
 \openout5 = `matfmaster-primer.toc'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 307.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 307.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 359.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 359.
  (./matfmaster-primer.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 307.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 307.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 359.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 359.
 Package rerunfilecheck Info: File `matfmaster-primer.out' has not changed.
-(rerunfilecheck)             Checksum: 09FD54F59AF9875F575CD2CEC3CAD1FD;1137.
+(rerunfilecheck)             Checksum: EAA5903F32F243F8C43B068F80FD05BC;1706.
 
 
 LaTeX Font Warning: Size substitutions with differences
@@ -1409,12 +1420,15 @@ LaTeX Font Warning: Size substitutions with differences
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
+
+LaTeX Warning: There were multiply-defined labels.
+
  ) 
 Here is how much of TeX's memory you used:
- 16935 strings out of 494356
- 231847 string characters out of 6171273
- 362317 words of memory out of 5000000
- 20029 multiletter control sequences out of 15000+600000
+ 16948 strings out of 494356
+ 231986 string characters out of 6171273
+ 362467 words of memory out of 5000000
+ 20036 multiletter control sequences out of 15000+600000
  17262 words of font info for 37 fonts, out of 8000000 for 9000
  452 hyphenation exceptions out of 8191
  48i,12n,41p,891b,1876s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1431,10 +1445,10 @@ k> </home/flazic/.texlive2017/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.60
 0pk> </home/flazic/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm2074.60
 0pk> </home/flazic/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1728.60
 0pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on matfmaster-primer.pdf (12 pages, 189828 bytes).
+Output written on matfmaster-primer.pdf (14 pages, 216211 bytes).
 PDF statistics:
- 600 PDF objects out of 1000 (max. 8388607)
- 193 compressed objects within 2 object streams
- 67 named destinations out of 1000 (max. 500000)
- 67 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 642 PDF objects out of 1000 (max. 8388607)
+ 211 compressed objects within 3 object streams
+ 72 named destinations out of 1000 (max. 500000)
+ 88 words of extra memory for PDF output out of 10000 (max. 10000000)
 
