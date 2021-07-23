@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2021.5.30)  21 JUL 2021 13:35
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2021.5.30)  23 JUL 2021 12:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1449,7 +1449,7 @@ LaTeX Warning: There were multiply-defined labels.
 Here is how much of TeX's memory you used:
  16985 strings out of 494356
  232440 string characters out of 6171273
- 362467 words of memory out of 5000000
+ 363467 words of memory out of 5000000
  20037 multiletter control sequences out of 15000+600000
  17262 words of font info for 37 fonts, out of 8000000 for 9000
  452 hyphenation exceptions out of 8191
@@ -1467,7 +1467,7 @@ k> </home/flazic/.texlive2017/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.60
 0pk> </home/flazic/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm2074.60
 0pk> </home/flazic/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1728.60
 0pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on matfmaster-primer.pdf (17 pages, 227872 bytes).
+Output written on matfmaster-primer.pdf (17 pages, 227863 bytes).
 PDF statistics:
  712 PDF objects out of 1000 (max. 8388607)
  264 compressed objects within 3 object streams
