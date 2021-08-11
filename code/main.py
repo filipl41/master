@@ -3,6 +3,7 @@ import glob
 import os
 import subprocess
 import tempfile
+import tkinter as tk
 
 def compile_lto(source_files):
     tmp_folder = tempfile.mkdtemp()
@@ -25,6 +26,29 @@ def compile_non_lto(source_files):
     subprocess.run("llvm-dis {exe_path} -o {result_path}".format(exe_path=exe_path + ".bc", result_path=result_ll), shell=True)
     return result_ll
 
+def read_file(file):
+    result = ""
+    with open(file) as f:
+        for line in f:
+            result +=line
+    return result
+
+def show_files(string_lto, string_non_lto):
+    root = tk.Tk()
+    root.geometry("1200x700+200+150")
+    non_lto_text = tk.Text(root, font=("times new roman",12))
+    non_lto_text.insert(tk.END, string_lto)
+    lto_text = tk.Text(root, font=("times new roman",12))
+    lto_text.insert(tk.END, string_non_lto)
+
+    non_lto_text.configure(state=tk.DISABLED)
+    lto_text.configure(state=tk.DISABLED)
+    lto_text.bind("<1>", lambda event: lto_text.focus_set())
+    non_lto_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+    non_lto_text.bind("<1>", lambda event: non_lto_text.focus_set())
+    lto_text.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+    tk.mainloop()
+
 def compile_files(folder_path):
     source_files = ""
     for filename in glob.glob(os.path.join(folder_path, '*.cpp')):  
@@ -32,9 +56,10 @@ def compile_files(folder_path):
 
     result_lto = compile_lto(source_files)
     result_non_lto = compile_non_lto(source_files)
+    string_lto = read_file(result_lto)
+    string_non_lto = read_file(result_non_lto)
 
-    subprocess.run("cat " + result_lto, shell=True)
-    subprocess.run("cat " + result_non_lto, shell=True)
+    show_files(string_lto, string_non_lto)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
