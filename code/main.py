@@ -34,9 +34,11 @@ class ColorLineConnect:
         if source_line not in self.map.keys():
             self.map[source_line] = COLORS[self.color_index]
             self.color_index +=1
+            self.color_index = self.color_index if self.color_index < len(COLORS) else 0
 
 color_line_map = ColorLineConnect()
 llvm_debug_line_map = {}
+next_source_file_index = 0
 
 class SourceFileConnect:
     def __init__(self, name) :
@@ -136,7 +138,6 @@ def parse_and_highlight_source(string_code, text_widget, connected_files, curr_s
         for file in curr_connected:
             if file.source_file_name == curr_source_file:
                 connected_files_list.append(file)
-                print(file.source_file_name)
 
     line_num = 1
     tag_num = 0
@@ -156,10 +157,25 @@ def parse_and_highlight_source(string_code, text_widget, connected_files, curr_s
 
 
 
-def insert_text(non_lto_text_widget, string_non_lto, lto_text_widget, string_lto, connected_files, source_file_name, source_text_widget):
+def insert_text(non_lto_text_widget, string_non_lto, lto_text_widget, string_lto, connected_files, source_files, source_text_widget):
+    global next_source_file_index
+    next_source_file_index = next_source_file_index if next_source_file_index < len(source_files) else 0
+    source_file_name = source_files[next_source_file_index]
+    next_source_file_index +=1
+    
+    non_lto_text_widget.configure(state=tk.NORMAL)
+    lto_text_widget.configure(state=tk.NORMAL)
+    source_text_widget.configure(state=tk.NORMAL)
+
+    non_lto_text_widget.delete("1.0","end")
+    lto_text_widget.delete("1.0","end")
+    source_text_widget.delete("1.0","end")
+    
+
     non_lto_text_widget.insert(tk.END, string_non_lto)
     lto_text_widget.insert(tk.END, string_lto)
     source_file_text = read_file(source_file_name)
+    print(source_file_text)
     source_text_widget.insert(tk.END, source_file_text)
     connected_lto, connected_non_lto = connected_files
 
@@ -167,13 +183,19 @@ def insert_text(non_lto_text_widget, string_non_lto, lto_text_widget, string_lto
     parse_and_highlight_llvm(string_non_lto, non_lto_text_widget, connected_non_lto, source_file_name)
     parse_and_highlight_source(source_file_text, source_text_widget, connected_files, source_file_name)
 
+    non_lto_text_widget.configure(state=tk.DISABLED)
+    lto_text_widget.configure(state=tk.DISABLED)
+    source_text_widget.configure(state=tk.DISABLED)
+
 def show_files(string_lto, string_non_lto, connected_files, source_files):
     root = tk.Tk()
     root.geometry("1200x700+200+150")
     non_lto_text = tk.Text(root, font=("times new roman",12))
     lto_text = tk.Text(root, font=("times new roman",12))
     source_file_text = tk.Text(root, font=("times new roman",12))
-    insert_text(non_lto_text, string_non_lto, lto_text, string_lto, connected_files, source_files[0], source_file_text)
+    button = tk.Button(root, text="Next source file", height=10, command=lambda: insert_text(non_lto_text, string_non_lto, lto_text, string_lto, connected_files, source_files, source_file_text))
+
+    insert_text(non_lto_text, string_non_lto, lto_text, string_lto, connected_files, source_files, source_file_text)
 
     non_lto_text.configure(state=tk.DISABLED)
     lto_text.configure(state=tk.DISABLED)
@@ -183,6 +205,7 @@ def show_files(string_lto, string_non_lto, connected_files, source_files):
     lto_text.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
     source_file_text.pack(fill=tk.BOTH, expand=True)
     source_file_text.configure(state=tk.DISABLED)
+    button.pack()
     tk.mainloop()
 
 def compile_files(folder_path):
