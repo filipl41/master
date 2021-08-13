@@ -7,8 +7,8 @@ import tkinter as tk
 import re
 
 
-COLORS = ['alice blue', #'lavender', 'slate gray', 'blue',
-    #'pale turquoise', 'turquoise',
+COLORS = [#'alice blue', 'lavender', 'slate gray',
+    'pale turquoise', 'turquoise',
     'cyan',  'dark green',  'lime green', 'yellow green',
     'indian red', 
     'dark salmon',  'orange', 
@@ -25,12 +25,18 @@ COLORS = ['alice blue', #'lavender', 'slate gray', 'blue',
     'HotPink1', 
     'gray1']
 
-color_index = 0
-
 class ColorLineConnect:
-    def __init__(self, llvm_line, color_index):
-        self.llvm_lines = [llvm_line]
-        self.color = COLORS[color_index]
+    def __init__(self):
+        self.color_index = 0
+        self.map = {}
+
+    def insert(self, source_line):
+        if source_line not in self.map.keys():
+            self.map[source_line] = COLORS[self.color_index]
+            self.color_index +=1
+
+color_line_map = ColorLineConnect()
+llvm_debug_line_map = {}
 
 class SourceFileConnect:
     def __init__(self, name) :
@@ -39,12 +45,9 @@ class SourceFileConnect:
 
     def insert(self, key, value):
         if key in self.map.keys():
-            self.map[key].llvm_lines.append(value)
+            self.map[key].append(value)
         else: 
-            global color_index
-            cl = ColorLineConnect(value, color_index)
-            self.map[key] = cl
-            color_index =  color_index + 1
+            self.map[key] = [value]
             #color_index = color_index if color_index >= len(COLORS) else 0
         
 
@@ -80,55 +83,89 @@ def connect_source_llvm(llvm_ir_output):
     source_llvm_map = {}
     source_files = re.findall(".*DIFile.*\n", llvm_ir_output)
     for source_file in source_files:
-        match = re.match("(\![0-9]+).*filename: (.*\.cpp).*", source_file)
+        match = re.match("(\![0-9]+).*filename: \"(.*\.cpp).*", source_file)
         source_llvm_map[match.group(1)] = SourceFileConnect(match.group(2))
     for key in source_llvm_map.keys():
         matches = re.findall("(\![0-9]+).*file: {file}.*line: ([0-9]+).*".format(file=key), llvm_ir_output)
         for llvm_line, source_line  in matches:
             source_llvm_map[key].insert(source_line, llvm_line)
+            color_line_map.insert(source_line)
 
     for values in source_llvm_map.values():
         new_values = []
         for scope_values in values.map.values():
-            for scope_value in  scope_values.llvm_lines:
+            for scope_value in  scope_values:
                 matches = re.findall("(\![0-9]+).*line: ([0-9]+).*scope: {scope}.*".format(scope=scope_value), llvm_ir_output)
                 for llvm_line, source_line in matches:
                     new_values.append((source_line, llvm_line))
         for source_line, llvm_line in new_values:
-            values.insert(source_line, llvm_line)        
+            values.insert(source_line, llvm_line)
+            color_line_map.insert(source_line)
+        
        
 
     return source_llvm_map.values()
 
-def parse_and_highlight(string_code, text_widget, connected_files):
+def parse_and_highlight_llvm(string_code, text_widget, connected_files, curr_source_file):
+    for file in connected_files:
+        if file.source_file_name == curr_source_file:
+            curr_connected_file = file
+
     line_num = 1
     tag_num = 0
     string_list = string_code.splitlines()
     for code_line in string_list:
-        for source_line in connected_files:
-            for value_list in source_line.map.values():
-                    for value in value_list.llvm_lines:
-                        match = re.search(".*\!dbg {dbg_num}.*".format(dbg_num=value), code_line)
-                        if match:
-                            print(code_line)
-                            debug = re.search(".*@llvm\.dbg\.value.*", code_line)
-                            if debug:
-                                continue
-                            text_widget.tag_add("start{}".format(tag_num),"{line_num}.5 linestart".format(line_num=line_num), "{line_num}.5 lineend".format(line_num=line_num) )
-                            text_widget.tag_config("start{}".format(tag_num), background= "{}".format(value_list.color), foreground= "black")
-                            tag_num += 1
+        for key, value_list in curr_connected_file.map.items():
+                for value in value_list:
+                    match = re.search(".*\!dbg {dbg_num}.*".format(dbg_num=value), code_line)
+                    if match:
+                        debug = re.search(".*@llvm\.dbg\.value.*", code_line)
+                        if debug:
+                            continue
+                        llvm_debug_line_map[value] = True
+                        text_widget.tag_add("start{}".format(tag_num),"{line_num}.5 linestart".format(line_num=line_num), "{line_num}.5 lineend".format(line_num=line_num) )
+                        text_widget.tag_config("start{}".format(tag_num), background= "{}".format(color_line_map.map[key]), foreground= "black")
+                        tag_num += 1
+
+        line_num+=1
+
+def parse_and_highlight_source(string_code, text_widget, connected_files, curr_source_file):
+    connected_files_list = []
+
+    for curr_connected in connected_files:
+        for file in curr_connected:
+            if file.source_file_name == curr_source_file:
+                connected_files_list.append(file)
+                print(file.source_file_name)
+
+    line_num = 1
+    tag_num = 0
+    string_list = string_code.splitlines()
+    for _ in string_list:
+        for curr_connected_file in connected_files_list:
+            if str(line_num) in curr_connected_file.map.keys():
+                #if there is no that line in llvm, no need to highlight
+                for val in curr_connected_file.map[str(line_num)] :
+                    if val in llvm_debug_line_map:
+                        text_widget.tag_add("start{}".format(tag_num),"{line_num}.5 linestart".format(line_num=line_num), "{line_num}.5 lineend".format(line_num=line_num) )
+                        text_widget.tag_config("start{}".format(tag_num), background= "{}".format(color_line_map.map[str(line_num)]), foreground= "black")
+                        tag_num += 1
+                        break
 
         line_num+=1
 
 
-def insert_text(non_lto_text_widget, string_non_lto, lto_text_widget, string_lto, connected_files, string_source, string_text_widget):
+
+def insert_text(non_lto_text_widget, string_non_lto, lto_text_widget, string_lto, connected_files, source_file_name, source_text_widget):
     non_lto_text_widget.insert(tk.END, string_non_lto)
     lto_text_widget.insert(tk.END, string_lto)
-    string_text_widget.insert(tk.END, string_source)
+    source_file_text = read_file(source_file_name)
+    source_text_widget.insert(tk.END, source_file_text)
     connected_lto, connected_non_lto = connected_files
-    #parse_and_highlight(string_lto, lto_text_widget, connected_lto)
-    parse_and_highlight(string_non_lto, non_lto_text_widget, connected_non_lto)
 
+    parse_and_highlight_llvm(string_lto, lto_text_widget, connected_lto, source_file_name)
+    parse_and_highlight_llvm(string_non_lto, non_lto_text_widget, connected_non_lto, source_file_name)
+    parse_and_highlight_source(source_file_text, source_text_widget, connected_files, source_file_name)
 
 def show_files(string_lto, string_non_lto, connected_files, source_files):
     root = tk.Tk()
@@ -136,8 +173,7 @@ def show_files(string_lto, string_non_lto, connected_files, source_files):
     non_lto_text = tk.Text(root, font=("times new roman",12))
     lto_text = tk.Text(root, font=("times new roman",12))
     source_file_text = tk.Text(root, font=("times new roman",12))
-    print(source_files[0])
-    insert_text(non_lto_text, string_non_lto, lto_text, string_lto, connected_files, read_file(source_files[0]), source_file_text)
+    insert_text(non_lto_text, string_non_lto, lto_text, string_lto, connected_files, source_files[0], source_file_text)
 
     non_lto_text.configure(state=tk.DISABLED)
     lto_text.configure(state=tk.DISABLED)
