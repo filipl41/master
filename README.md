@@ -19,3 +19,9 @@ primer pokretanja "root" direktorijuma ovog projekta
 
 python3 code/main.py  -i code/example/ -o 3
 
+Izvrsenjem komande iznad dobija se ovakav prikaz.
+![Alt text](main.png "main.cpp")
+Kao sto vidimo ovde je prikaz fajla main.cpp i odgovarajucih linija u llvm ir fajlovima.
+Klikom na dugme, prelazimo na sledeci fajl, to jest fajl a.cpp
+![Alt text](a.png "a.cpp")
+
