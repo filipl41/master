@@ -7,7 +7,7 @@ import tkinter as tk
 import re
 
 
-COLORS = [#'alice blue', 'lavender', 'slate gray',
+COLORS = ['alice blue', 'lavender', 'slate gray',
     'pale turquoise', 'turquoise',
     'cyan',  'dark green',  'lime green', 'yellow green',
     'indian red', 
@@ -53,9 +53,9 @@ class SourceFileConnect:
             #color_index = color_index if color_index >= len(COLORS) else 0
         
 
-def compile_lto(source_files):
+def compile_lto(source_files, optimization_level):
     tmp_folder = tempfile.mkdtemp()
-    subprocess.run("clang {source_files} -O3 -g -o {exe_path} -flto -Wl,-plugin-opt=save-temps".format(source_files=source_files, exe_path=tmp_folder + "/exe"), shell=True)
+    subprocess.run("clang {source_files} -O{level} -g -o {exe_path} -flto -Wl,-plugin-opt=save-temps".format(level=optimization_level, source_files=source_files, exe_path=tmp_folder + "/exe"), shell=True)
 
     optimized_file = ""
     for filename in glob.glob(os.path.join(tmp_folder, '*.precodegen.*')):  
@@ -64,11 +64,11 @@ def compile_lto(source_files):
     subprocess.run("llvm-dis {optimized_bc} -o {result_ll}".format(optimized_bc=optimized_file, result_ll=result_ll), shell=True)
     return result_ll
     
-def compile_non_lto(source_files):
+def compile_non_lto(source_files, optimization_level):
     tmp_folder = tempfile.mkdtemp()
     os.environ['LLVM_COMPILER'] = 'clang'
     exe_path = tmp_folder + "/exe"
-    subprocess.run("wllvm -O3 -g {source_files} -o  {exe_path}".format(source_files=source_files, exe_path=exe_path), shell=True)
+    subprocess.run("wllvm -O{level} -g {source_files} -o  {exe_path}".format(level=optimization_level, source_files=source_files, exe_path=exe_path), shell=True)
     subprocess.run("extract-bc {exe_path}".format(exe_path=exe_path), shell=True)
     result_ll = tmp_folder + "/result.ll"
     subprocess.run("llvm-dis {exe_path} -o {result_path}".format(exe_path=exe_path + ".bc", result_path=result_ll), shell=True)
@@ -157,7 +157,7 @@ def parse_and_highlight_source(string_code, text_widget, connected_files, curr_s
 
 
 
-def insert_text(non_lto_text_widget, string_non_lto, lto_text_widget, string_lto, connected_files, source_files, source_text_widget):
+def insert_text(non_lto_text_widget, string_non_lto, lto_text_widget, string_lto, connected_files, source_files, source_text_widget, label):
     global next_source_file_index
     next_source_file_index = next_source_file_index if next_source_file_index < len(source_files) else 0
     source_file_name = source_files[next_source_file_index]
@@ -170,12 +170,11 @@ def insert_text(non_lto_text_widget, string_non_lto, lto_text_widget, string_lto
     non_lto_text_widget.delete("1.0","end")
     lto_text_widget.delete("1.0","end")
     source_text_widget.delete("1.0","end")
-    
+    label.config(text="Non LTO" + " " * 220 + source_file_name.split("/")[-1] + " " * (180  - len(source_file_name.split("/")[-1]))+ "LTO")
 
     non_lto_text_widget.insert(tk.END, string_non_lto)
     lto_text_widget.insert(tk.END, string_lto)
     source_file_text = read_file(source_file_name)
-    print(source_file_text)
     source_text_widget.insert(tk.END, source_file_text)
     connected_lto, connected_non_lto = connected_files
 
@@ -189,14 +188,16 @@ def insert_text(non_lto_text_widget, string_non_lto, lto_text_widget, string_lto
 
 def show_files(string_lto, string_non_lto, connected_files, source_files):
     root = tk.Tk()
-    root.geometry("1200x700+200+150")
+    root.geometry("1800x700+200+150")
     non_lto_text = tk.Text(root, font=("times new roman",12))
     lto_text = tk.Text(root, font=("times new roman",12))
     source_file_text = tk.Text(root, font=("times new roman",12))
-    button = tk.Button(root, text="Next source file", height=10, command=lambda: insert_text(non_lto_text, string_non_lto, lto_text, string_lto, connected_files, source_files, source_file_text))
+    button = tk.Button(root, text="Next source file", height=10, command=lambda: insert_text(non_lto_text, string_non_lto, lto_text, string_lto, connected_files, source_files, source_file_text, label))
+    label = tk.Label(root, anchor="w")
 
-    insert_text(non_lto_text, string_non_lto, lto_text, string_lto, connected_files, source_files, source_file_text)
+    insert_text(non_lto_text, string_non_lto, lto_text, string_lto, connected_files, source_files, source_file_text, label)
 
+    label.pack(side=tk.TOP, fill=tk.BOTH)
     non_lto_text.configure(state=tk.DISABLED)
     lto_text.configure(state=tk.DISABLED)
     lto_text.bind("<1>", lambda event: lto_text.focus_set())
@@ -208,26 +209,31 @@ def show_files(string_lto, string_non_lto, connected_files, source_files):
     button.pack()
     tk.mainloop()
 
-def compile_files(folder_path):
+def trim_debug_info(llvm_debug_otput):
+    result = re.sub("^\![0-9]+ = .*\n", "", llvm_debug_otput, flags=re.MULTILINE)
+    result = re.sub("^\!llvm\..*\n", "", result, flags=re.MULTILINE )
+    return result
+
+def compile_files(folder_path, optimization_level):
     source_files = ""
     for filename in glob.glob(os.path.join(folder_path, '*.cpp')):  
         source_files += filename + " "
 
-    result_lto = compile_lto(source_files)
-    result_non_lto = compile_non_lto(source_files)
+    result_lto = compile_lto(source_files, optimization_level)
+    result_non_lto = compile_non_lto(source_files, optimization_level)
     string_lto = read_file(result_lto)
     string_non_lto = read_file(result_non_lto)
     connected_files_non_lto = connect_source_llvm(string_non_lto)
     connected_files_lto = connect_source_llvm(string_lto)
     source_files_list = source_files.split()
-    show_files(string_lto, string_non_lto, (connected_files_lto,connected_files_non_lto), source_files_list)
+    show_files(trim_debug_info(string_lto),trim_debug_info(string_non_lto), (connected_files_lto,connected_files_non_lto), source_files_list)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--input", help="Input folder path", required=True)
+    parser.add_argument("-o", "--optimization_level", help= "Optimization level", nargs="?", type=str, const="0", default="0", choices=['0', '1', '2', '3', '4', 'z', 'g', 'z', 'fast'])
     args = parser.parse_args()
-    
-    compile_files(args.input)
+    compile_files(args.input, args.optimization_level)
 
 
 
