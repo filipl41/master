@@ -305,6 +305,7 @@ int main(){
         do_nothing();
     }
 }
+Primer 3.1
 \end{lstlisting}
 
 Видимо у примеру да функција  do{\_}nothing, као и што јој име каже, не ради ништа.
@@ -329,11 +330,60 @@ sys     0m0,000s
 \end{lstlisting}
 
 Разлика је у времену извршавања је очигледна.
-Једноставно без активне оптимизације целовитог програма, алат за оптимизацију није могао бити
-сигуран шта функција do{\_}nothing заправо ради, и програм је позивао исту милион пута у петљи,
-док је са активном оптимизацијом могао да види к\^{o}д функције и да  оптимизује петљу.
+Испод имамо приказ LLVM међурепрезентације без и са укљученом оптмизацијом целовитог програма
+и анализираћемо разлике између њих.
+\begin{lstlisting}
+; Function Attrs: norecurse uwtable
+define i32 @main() local_unnamed_addr #0 !dbg !9 {
+  call void @llvm.dbg.value(metadata i32 0, metadata !14, metadata !DIExpression()), !dbg !16
+  br label %2, !dbg !17
 
-//TODO dodaj LLVM IR
+; <label>:1:                                      ; preds = %2
+  ret i32 0, !dbg !18
+
+; <label>:2:                                      ; preds = %2, %0
+  %3 = phi i32 [ 0, %0 ], [ %4, %2 ]
+  call void @llvm.dbg.value(metadata i32 %3, metadata !14, metadata !DIExpression()), !dbg !16
+  tail call void @_Z10do_nothingv(), !dbg !19
+  %4 = add nuw nsw i32 %3, 1, !dbg !22
+  call void @llvm.dbg.value(metadata i32 %4, metadata !14, metadata !DIExpression()), !dbg !16
+  %5 = icmp eq i32 %4, 1000000000, !dbg !23
+  br i1 %5, label %1, label %2, !dbg !17, !llvm.loop !24
+}
+
+; Function Attrs: nounwind readnone speculatable
+declare void @llvm.dbg.value(metadata, metadata, metadata) #1
+
+; Function Attrs: norecurse nounwind readnone uwtable
+define void @_Z10do_nothingv() local_unnamed_addr #2 !dbg !26 {
+  ret void, !dbg !29
+}
+Primer 3.1 bez optimizacije celovitog programa
+\end{lstlisting}
+
+
+\begin{lstlisting}
+; Function Attrs: norecurse nounwind readnone uwtable
+define dso_local i32 @main() local_unnamed_addr #0 !dbg !9 {
+  call void @llvm.dbg.value(metadata i32 0, metadata !14, metadata !DIExpression()), !dbg !16
+  ret i32 0, !dbg !17
+}
+
+; Function Attrs: nounwind readnone speculatable
+declare void @llvm.dbg.value(metadata, metadata, metadata) #1
+
+Primer 3.1 sa optimizacijom celovitog programa
+\end{lstlisting}
+
+У примеру где није укључена оптимизација целовитог програма компајлер не зна како
+изгледа функција do{\_}nothing и он мора милион пута у пељи да је позива.
+Када је укључена оптимизација целовитог програма компајлер види тело те функције,
+и види да она не ради ништа, тако да може да оптимизује не само позивање те функција,
+односно да је инлајнује, већ може да уклнони комплетну петљу, односно елиминише мртав 
+к\^{o}д.
+Видимо да је елиминисана и функција do{\_}nothing из извршног програма и да је унутар
+main функције остала само повратна вредност, што овај програм само и ради.
+О инлајновању и елиминацији мртвог к\^{o}д биће више речи у наставку.
 
 \section{Ортимизација током линковања}
 
@@ -425,6 +475,13 @@ lto{\_}codegen{\_}add{\_}must{\_}preserve{\_}symbol функцијом.
 по старом принципу, као да никада нису ни постојали битк\^{o}д фајлови.
 
 \section{Отпимизација целовитог програма без подршке линкера}
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.8\textwidth]{llvm_link.png}
+  \caption{LLVM процес компилације без подршке линкера}
+  \label{fig:grafikon}
+\end{figure}
+
 Приступ отимизације целовитог програма са линкером захтева Gold[12] линкер,
 који у себи има подршку за libLTO библиотеку.
 На неким системима овај линкер није доступан и ту је немогуће извршити стандардну
@@ -437,7 +494,6 @@ lto{\_}codegen{\_}add{\_}must{\_}preserve{\_}symbol функцијом.
 са тим што овај приступ неће радити уколико сви фајлови нису  битк\^{o}д фајлови,
 односно не ради са објектним фајловима.
 
-//TODO nacrtaj grafik
 
 \section{Инлајновање функција}
 
@@ -505,7 +561,112 @@ lto{\_}codegen{\_}add{\_}must{\_}preserve{\_}symbol функцијом.
 Програмер може у извнорном коду сигнализирати компајлеру да изврши инлајновање
 атрибутом always{\_}inline, на системима Unix, али ни то не гарантује да ће на крају
 функција заиста бити инлајнована.
-//TODO primeri bencmarci
+\\
+Сада ћемо приказати један пример где је могуће извршити инлајновање уколико
+је укључена оптимизација целовитог програма.
+
+\begin{lstlisting}
+//square.hpp           
+int square(int);         
+    					
+//square.cpp				
+int square(int a){
+    return a *a;
+}
+
+//main.cpp
+#include "square.hpp"
+#include <iostream>
+
+int main(){
+    int result = 0;
+    
+    for (int i = 0; i < 100; i++){
+        result+= square(i);
+    }
+    std::cout << result;
+}
+
+Primer 3.3.1
+\end{lstlisting}
+
+Сада ћемо видети разлике LLVM међурепрезентације без и са оптимизацијом
+целовитог програма у примеру 3.3.1.
+
+\begin{lstlisting}
+ Function Attrs: norecurse uwtable
+define i32 @main() local_unnamed_addr #4 !dbg !966 {
+  call void @llvm.dbg.value(metadata i32 0, metadata !968, metadata !DIExpression()), !dbg !971
+  call void @llvm.dbg.value(metadata i32 0, metadata !969, metadata !DIExpression()), !dbg !972
+  br label %3, !dbg !973
+
+; <label>:1:                                      ; preds = %3
+  %2 = tail call dereferenceable(272) %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"* nonnull @_ZSt4cout, i32 %7), !dbg !974
+  ret i32 0, !dbg !975
+
+; <label>:3:                                      ; preds = %3, %0
+  %4 = phi i32 [ 0, %0 ], [ %8, %3 ]
+  %5 = phi i32 [ 0, %0 ], [ %7, %3 ]
+  call void @llvm.dbg.value(metadata i32 %5, metadata !968, metadata !DIExpression()), !dbg !971
+  call void @llvm.dbg.value(metadata i32 %4, metadata !969, metadata !DIExpression()), !dbg !972
+  %6 = tail call i32 @_Z6squarei(i32 %4), !dbg !976
+  %7 = add nsw i32 %6, %5, !dbg !979
+  %8 = add nuw nsw i32 %4, 1, !dbg !980
+  call void @llvm.dbg.value(metadata i32 %8, metadata !969, metadata !DIExpression()), !dbg !972
+  call void @llvm.dbg.value(metadata i32 %7, metadata !968, metadata !DIExpression()), !dbg !971
+  %9 = icmp eq i32 %8, 100, !dbg !981
+  br i1 %9, label %1, label %3, !dbg !973, !llvm.loop !982
+}
+
+; Function Attrs: nounwind readnone speculatable
+declare void @llvm.dbg.value(metadata, metadata, metadata) #5
+
+declare dereferenceable(272) %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"*, i32) local_unnamed_addr #1
+
+; Function Attrs: nounwind readnone uwtable
+define i32 @_Z6squarei(i32) local_unnamed_addr #6 !dbg !984 {
+  call void @llvm.dbg.value(metadata i32 %0, metadata !986, metadata !DIExpression()), !dbg !987
+  %2 = mul nsw i32 %0, %0, !dbg !988
+  ret i32 %2, !dbg !989
+}
+Primer 3.3.1 bez optimizacije celovitog programa
+\end{lstlisting}
+
+\begin{lstlisting}
+; Function Attrs: norecurse uwtable
+define dso_local i32 @main() local_unnamed_addr #4 !dbg !966 {
+  call void @llvm.dbg.value(metadata i32 0, metadata !968, metadata !DIExpression()), !dbg !971
+  call void @llvm.dbg.value(metadata i32 0, metadata !969, metadata !DIExpression()), !dbg !972
+  %1 = tail call dereferenceable(272) %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"* nonnull @_ZSt4cout, i32 328350), !dbg !973
+  ret i32 0, !dbg !974
+}
+
+; Function Attrs: nounwind readnone speculatable
+declare void @llvm.dbg.value(metadata, metadata, metadata) #5
+
+declare dereferenceable(272) %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"*, i32) local_unnamed_addr #1
+Primer 3.3.1 sa optimizacijom celovitog programa
+\end{lstlisting}
+
+Ако погледамо међурепрезентацију без оптимизације целовитог програма видимо да је она јако
+слична изворном к\^{o}ду, компајлер не види тело функције square, тако да не може неке 
+значајније оптимизације да изврши.
+Са друге стране, када је укључена оптимизација целовитог програма, компајлер
+успева да инлајнује функцију.
+Овим се компајлер не само решава трошкова позива функција, већ омогућава и остале оптимизације.
+Зато што сада имамо тело функције у блоку петље, компајлер увиђа да се петља извршава константан
+број пута и да нема потребе стално израчунавати исту приликом покретања програма, већ вредност
+променљиве result може да се израчуна приликом компајлирања, самим тим се решавамо петље и
+к\^{o}да око ње.
+У позиву std::cout функције видимо резултат израчунавања :
+\begin{lstlisting}
+tail call dereferenceable(272) %"class.std::basic_ostream"*
+@_ZNSolsEi(%"class.std::basic_ostream"
+* nonnull @_ZSt4cout, i32 328350)
+\end{lstlisting}
+Такође, више нема потребе за постојањем функције square(више се нигде не користи)
+и она је избрисана из извршног фајла.
+
 
 
 \section{Елиминација мртвог к\^{o}да}
@@ -521,14 +682,12 @@ lto{\_}codegen{\_}add{\_}must{\_}preserve{\_}symbol функцијом.
 То ради једноставним праћењем позива свих статичких глобала и сврставањем истих
 у живе или мртве скупове, у зависности да ли се глобал користи или не.
 Све глобале из мртвог скупа, на крају оптимизационих пролаза, можемо елиминисати.
-
-//TODO primer 
-
 Са укљученом оптимизацијом целовитог програма можемо избацити не само статичке
 глобалне променљиве или функције, него све глобале који се не користе.
 Овај поступак се извршава током линковања и описан је у секцији  3.1.
 
-/TODO primer
+
+
 
 \section{Девиртуализација}
  Девиртуализација(eng. devirtualization[17]) је поступак замене виртуелних позива

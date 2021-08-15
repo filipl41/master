@@ -55,23 +55,23 @@ class SourceFileConnect:
 
 def compile_lto(source_files, optimization_level):
     tmp_folder = tempfile.mkdtemp()
-    subprocess.run("clang {source_files} -O{level} -g -o {exe_path} -flto -Wl,-plugin-opt=save-temps".format(level=optimization_level, source_files=source_files, exe_path=tmp_folder + "/exe"), shell=True)
+    subprocess.check_output("clang++ {source_files} -O{level} -g -o {exe_path} -flto -Wl,-plugin-opt=save-temps".format(level=optimization_level, source_files=source_files, exe_path=tmp_folder + "/exe"), shell=True)
 
     optimized_file = ""
     for filename in glob.glob(os.path.join(tmp_folder, '*.precodegen.*')):  
         optimized_file = filename
     result_ll = tmp_folder + "/result.ll"
-    subprocess.run("llvm-dis {optimized_bc} -o {result_ll}".format(optimized_bc=optimized_file, result_ll=result_ll), shell=True)
+    subprocess.check_output("llvm-dis {optimized_bc} -o {result_ll}".format(optimized_bc=optimized_file, result_ll=result_ll), shell=True)
     return result_ll
     
 def compile_non_lto(source_files, optimization_level):
     tmp_folder = tempfile.mkdtemp()
     os.environ['LLVM_COMPILER'] = 'clang'
     exe_path = tmp_folder + "/exe"
-    subprocess.run("wllvm -O{level} -g {source_files} -o  {exe_path}".format(level=optimization_level, source_files=source_files, exe_path=exe_path), shell=True)
-    subprocess.run("extract-bc {exe_path}".format(exe_path=exe_path), shell=True)
+    subprocess.check_output("wllvm++ -O{level} -g {source_files} -o  {exe_path}".format(level=optimization_level, source_files=source_files, exe_path=exe_path), shell=True)
+    subprocess.check_output("extract-bc {exe_path}".format(exe_path=exe_path), shell=True)
     result_ll = tmp_folder + "/result.ll"
-    subprocess.run("llvm-dis {exe_path} -o {result_path}".format(exe_path=exe_path + ".bc", result_path=result_ll), shell=True)
+    subprocess.check_output("llvm-dis {exe_path} -o {result_path}".format(exe_path=exe_path + ".bc", result_path=result_ll), shell=True)
     return result_ll
 
 def read_file(file):
@@ -86,7 +86,8 @@ def connect_source_llvm(llvm_ir_output):
     source_files = re.findall(".*DIFile.*\n", llvm_ir_output)
     for source_file in source_files:
         match = re.match("(\![0-9]+).*filename: \"(.*\.cpp).*", source_file)
-        source_llvm_map[match.group(1)] = SourceFileConnect(match.group(2))
+        if match:
+            source_llvm_map[match.group(1)] = SourceFileConnect(match.group(2))
     for key in source_llvm_map.keys():
         matches = re.findall("(\![0-9]+).*file: {file}.*line: ([0-9]+).*".format(file=key), llvm_ir_output)
         for llvm_line, source_line  in matches:
@@ -121,7 +122,7 @@ def parse_and_highlight_llvm(string_code, text_widget, connected_files, curr_sou
                 for value in value_list:
                     match = re.search(".*\!dbg {dbg_num}.*".format(dbg_num=value), code_line)
                     if match:
-                        debug = re.search(".*@llvm\.dbg\.value.*", code_line)
+                        debug = re.search(".*@llvm\.dbg\..*", code_line)
                         if debug:
                             continue
                         llvm_debug_line_map[value] = True
