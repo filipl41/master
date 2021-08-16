@@ -686,8 +686,128 @@ tail call dereferenceable(272) %"class.std::basic_ostream"*
 глобалне променљиве или функције, него све глобале који се не користе.
 Овај поступак се извршава током линковања и описан је у секцији  3.1.
 
+Сада ћемо видети пример у коме се јасно види предност елиминације мртвог
+к\^{o}да са укљученом оптимизацијом целовитог програма.
+
+\begin{lstlisting}
+//a.hpp
+int foo1(void);
+void foo2(void);
+void foo4(void);
+
+//a.cpp
+#include "a.hpp"
+
+static signed int i = 0;
+
+void foo2(void) {
+  i = -1;
+}
+
+static int foo3() {
+  foo4();
+  return 10;
+}
+
+int foo1(void) {
+  int data = 0;
+
+  if (i < 0)
+    data = foo3();
+
+  data = data + 42;
+  return data;
+}
+
+//main.cpp
+#include <iostream>
+#include "a.hpp"
+
+void foo4(void) {
+  std::cout << ("Hi\n");
+}
+
+int main() {
+  return foo1();
+}
+
+Primer 3.4.1
+\end{lstlisting}
+
+\begin{lstlisting}
+ Function Attrs: uwtable
+
+declare dereferenceable(272) %"class.std::basic_ostream"* @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(%"class.std::basic_ostream"* dereferenceable(272), i8*, i64) local_unnamed_addr #1
+
+; Function Attrs: uwtable
+define void @_Z4foo4v() local_unnamed_addr #0 !dbg !983 {
+  call void @llvm.dbg.value(metadata %"class.std::basic_ostream"* @_ZSt4cout, metadata !984, metadata !DIExpression()), !dbg !1048
+  call void @llvm.dbg.value(metadata i8* getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i64 0, i64 0), metadata !993, metadata !DIExpression()), !dbg !1050
+  %1 = tail call dereferenceable(272) %"class.std::basic_ostream"* @_ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l(%"class.std::basic_ostream"* nonnull dereferenceable(272) @_ZSt4cout, i8* nonnull getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i64 0, i64 0), i64 3), !dbg !1051
+  ret void, !dbg !1053
+}
+
+; Function Attrs: norecurse uwtable
+define i32 @main() local_unnamed_addr #5 !dbg !1054 {
+  %1 = tail call i32 @_Z4foo1v(), !dbg !1055
+  ret i32 %1, !dbg !1056
+}
+
+; Function Attrs: norecurse nounwind uwtable
+define void @_Z4foo2v() local_unnamed_addr #6 !dbg !1057 {
+  store i1 true, i1* @_ZL1i, align 4
+  ret void, !dbg !1058
+}
+
+; Function Attrs: uwtable
+define i32 @_Z4foo1v() local_unnamed_addr #0 !dbg !1059 {
+  call void @llvm.dbg.value(metadata i32 0, metadata !1061, metadata !DIExpression()), !dbg !1062
+  %1 = load i1, i1* @_ZL1i, align 4
+  br i1 %1, label %2, label %3, !dbg !1063
+
+; <label>:2:                                      ; preds = %0
+  tail call void @_Z4foo4v(), !dbg !1064
+  call void @llvm.dbg.value(metadata i32 10, metadata !1061, metadata !DIExpression()), !dbg !1062
+  br label %3, !dbg !1068
+
+; <label>:3:                                      ; preds = %2, %0
+  %4 = phi i32 [ 52, %2 ], [ 42, %0 ]
+  call void @llvm.dbg.value(metadata i32 %4, metadata !1061, metadata !DIExpression()), !dbg !1062
+  ret i32 %4, !dbg !1069
+}
+
+Primer 3.4.1 bez optimizacije celovitog programa
+\end{lstlisting}
 
 
+\begin{lstlisting}
+; Function Attrs: norecurse nounwind readnone uwtable
+define dso_local i32 @main() local_unnamed_addr #4 !dbg !982 {
+  ret i32 42, !dbg !983
+}
+Primer 3.4.1 sa optimizacijom celovitog programa
+\end{lstlisting}
+
+У примеру без оптимизације целовитог програма, видимо да је компајлер инлајновао
+функцију foo3 и она се не налази унутар извршног фајла.
+Компајлер је успео да елиминише функцију јер је она статичка, али остале нису
+тако да се оне налазе у извршном фајлу.
+Видимо да је и к\^{o}д међурепрезентације сличан изворном, тако да компајлер поред
+инлајновања, није успео да изврши неке веће оптимизације.
+\\
+Са друге стране, у примеру са оптимизацијом целовитог програма, видимо да је у
+извршном фајлу остала само main функција, која враћа вредност 42.
+Да би утврдили како се то догодило, проћи ћемо кроз цео процес оптимизације овог 
+програма, са укљученом оптимизацијом целовитог програма.
+Линкер прво препознаје да се функција foo2 не користи нигде у програму, шаље ту
+информацију компајлеру(конкретно алату за оптимизацију) и он је брише.
+Чим обрише функцију, алат за оптимизацију види да услов i < 0 никада није испуњен,
+тако да може да обрише и тај део к\^{o}да али и функцију foo3, јер се она сада
+више неће користити.
+Линкер сада препознаје да се функција foo4 не користи више тако да се и она брише.
+На крају остаје само функција foo1 која увек враћа вредност 42, то алат за оптимизацију
+препознаје, инлајнује је, брише и враћа вредност 42 као повратну вредност функције
+main.
 
 \section{Девиртуализација}
  Девиртуализација(eng. devirtualization[17]) је поступак замене виртуелних позива
@@ -705,6 +825,7 @@ tail call dereferenceable(272) %"class.std::basic_ostream"*
  да девиртуализује позив функције.
  
  \begin{lstlisting}
+#include <iostream>
 struct Base{
     virtual int f(){return 1;}
 };
@@ -716,15 +837,25 @@ struct Derived : public Base{
 int main(){
     Derived d;
     Base * b = new Base();
-    b->f();
-    d.f();  
+    std::cout << b->f();
+    std::cout << d.f();  
 }
  Primer 3.5.1
  \end{lstlisting}
-
- //todo llvm primer
  
- Као што видимо у примеру изнад, компајлер успешно девиртуализује ове функције
+ \begin{lstlisting}
+; Function Attrs: norecurse uwtable
+define i32 @main() local_unnamed_addr #4 !dbg !964 {
+  call void @llvm.dbg.value(metadata %struct.Derived* undef, metadata !966, metadata !DIExpression()), !dbg !985
+  %1 = tail call dereferenceable(272) %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"* nonnull @_ZSt4cout, i32 1), !dbg !986
+  call void @llvm.dbg.value(metadata %struct.Derived* undef, metadata !966, metadata !DIExpression()), !dbg !985
+  %2 = tail call dereferenceable(272) %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"* nonnull @_ZSt4cout, i32 2), !dbg !987
+  ret i32 0, !dbg !988
+}
+Primer 3.5.1 LLVM
+ \end{lstlisting}
+ 
+ Као што видимо у примеру изнад, компајлер успешно девиртуализује и инлајнује ове функције
  јер зна при компајлирању да променљива b садржи објекат типа Base, док променљива
  d садржи објекат типа Derived.
  Наравно увек када променљива садржи објекат неког типа, а не показивач или референцу,
@@ -785,6 +916,79 @@ Primer 3.5.3
  
 \subsection{Девиртуализација помоћу оптимизације целовитог програма}
  
+ Видели смо ситуације када компајлер без оптимизације целовитог програма може да
+ изврши девиртуализацију.
+ У већини ситуација нећемо наилазити на тако једноставне случајеве, а и често ће
+ дефиниције виртуелних функција бити у другим јединицама транслације.
+ Због тога што компајлер види цео програм, када је укључена оптимизација
+ целовитог програма, он види и функције и класе, тако да може да изврши
+ девиртуализацију агресивније.
+ Погледајмо следећи пример, који има само 1 изворни фајл.
+ \begin{lstlisting}
+#include <iostream>
+struct Base
+{
+  virtual int f() { return 1; }
+};
+
+struct Derived : public Base
+{
+  int f() override { return 2; }
+};
+
+int g(Derived *obj)
+{
+  return obj->f();
+}
+
+int main()
+{
+  Derived *obj = new Derived();
+  std::cout << g(obj);
+}
+Primer 3.5.4
+\end{lstlisting}
+	
+\begin{lstlisting}
+; Function Attrs: uwtable
+define i32 @_Z1gP7Derived(%struct.Derived*) local_unnamed_addr #0 !dbg !964 {
+  call void @llvm.dbg.value(metadata %struct.Derived* %0, metadata !985, metadata !DIExpression()), !dbg !986
+  %2 = bitcast %struct.Derived* %0 to i32 (%struct.Derived*)***, !dbg !987
+  %3 = load i32 (%struct.Derived*)**, i32 (%struct.Derived*)*** %2, align 8, !dbg !987, !tbaa !988
+  %4 = load i32 (%struct.Derived*)*, i32 (%struct.Derived*)** %3, align 8, !dbg !987
+  %5 = tail call i32 %4(%struct.Derived* %0), !dbg !987
+  ret i32 %5, !dbg !991
+}
+
+; Function Attrs: nounwind readnone speculatable
+declare void @llvm.dbg.value(metadata, metadata, metadata) #4
+
+; Function Attrs: norecurse uwtable
+define i32 @main() local_unnamed_addr #5 !dbg !992 {
+  %1 = tail call dereferenceable(272) %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"* nonnull @_ZSt4cout, i32 2), !dbg !995
+  ret i32 0, !dbg !996
+}
+Primer 3.5.4 bez optimizacije celovitog programa
+\end{lstlisting}
+
+\begin{lstlisting}
+; Function Attrs: norecurse uwtable
+define dso_local i32 @main() local_unnamed_addr #4 !dbg !964 {
+  %1 = tail call dereferenceable(272) %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"* nonnull @_ZSt4cout, i32 2), !dbg !984
+  ret i32 0, !dbg !985
+}
+Primer 3.5.4 sa optimizacijom celovitog programa
+\end{lstlisting}
+
+У примеру без оптимизације целовитог програма видимо инструкције за узимање вредности
+виртуелног показивача и позивање виртуелне функције, што значи да компајлер није успео
+да девиртуализује позив иако види тело функције и класе.
+То се дешава због тога што компајлер не зна да ли у некој другој јединици транслације
+постоји класа која је изведена из класе Derived и због тога не може да изврши
+оптимизације.
+Са укљученом оптимизацијом целовитог програма компајлер види да не постоји класа
+изведена из класе Derived и компајлер успешно девиртуализује а затим и инлајнује
+позив функције. 
  
  \chapter{ThinLTO}
  
