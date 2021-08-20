@@ -109,6 +109,36 @@ def connect_source_llvm(llvm_ir_output):
 
     return source_llvm_map.values()
 
+def generate_diff_string(llvm_ir, connected_files):
+    result = ""
+    string_list = llvm_ir.splitlines()
+    string_list = string_list[2:]
+    for line in string_list:
+        is_found = False
+        for connected_file in connected_files:
+            for key, values in connected_file.map.items():
+                for value in values :
+                    match = re.search(".*\!dbg {value}.*".format(value=value), line)
+                    if match:
+                        curr_line = re.sub("\!dbg {value}.*".format(value=value), "", line)
+                        curr_line = re.sub("%[0-9]+ = ", "", curr_line)
+                        if curr_line[-2] == ",":
+                            curr_line = curr_line[:-2]
+                        result += connected_file.source_file_name + ":" + key + ":" + curr_line.lstrip()
+                        is_found = True
+                        
+        if not is_found:
+            result += line
+        result += "\n"       
+    
+    result = re.sub(";.*\n.*@llvm\.dbg\..*\n", "", result, re.MULTILINE)
+    result = re.sub("; Function.*\n", "", result)
+ 
+    result = re.sub(".*@llvm\.dbg\..*\n", "", result, re.MULTILINE)
+    result = re.sub("attributes #[0-9]+ = .*", "", result, re.MULTILINE)
+    return result
+    
+
 def parse_and_highlight_llvm(string_code, text_widget, connected_files, curr_source_file):
     for file in connected_files:
         if file.source_file_name == curr_source_file:
@@ -187,13 +217,18 @@ def insert_text(non_lto_text_widget, string_non_lto, lto_text_widget, string_lto
     lto_text_widget.configure(state=tk.DISABLED)
     source_text_widget.configure(state=tk.DISABLED)
 
-def show_files(string_lto, string_non_lto, connected_files, source_files):
+def show_diff(lto_diff_file, non_lto_diff_file):
+    subprocess.check_output("kompare {non_lto} {lto} ".format(non_lto=non_lto_diff_file, lto=lto_diff_file), shell=True)
+
+
+def show_files(string_lto, string_non_lto, connected_files, source_files, lto_diff_file, non_lto_diff_file):
     root = tk.Tk()
     root.geometry("1800x700+200+150")
     non_lto_text = tk.Text(root, font=("times new roman",12))
     lto_text = tk.Text(root, font=("times new roman",12))
     source_file_text = tk.Text(root, font=("times new roman",12))
-    button = tk.Button(root, text="Next source file", height=10, command=lambda: insert_text(non_lto_text, string_non_lto, lto_text, string_lto, connected_files, source_files, source_file_text, label))
+    button = tk.Button(root, text="Next source file", width=20, height=3, command=lambda: insert_text(non_lto_text, string_non_lto, lto_text, string_lto, connected_files, source_files, source_file_text, label))
+    button_show_diff = tk.Button(root, height=3, width=20, text = "Show diff Non LTO - LTO", command=lambda: show_diff(lto_diff_file, non_lto_diff_file) )
     label = tk.Label(root, anchor="w")
 
     insert_text(non_lto_text, string_non_lto, lto_text, string_lto, connected_files, source_files, source_file_text, label)
@@ -208,12 +243,13 @@ def show_files(string_lto, string_non_lto, connected_files, source_files):
     source_file_text.pack(fill=tk.BOTH, expand=True)
     source_file_text.configure(state=tk.DISABLED)
     button.pack()
+    button_show_diff.pack()
     tk.mainloop()
 
 def trim_debug_info(llvm_debug_otput):
     result = re.sub("^\![0-9]+ = .*\n", "", llvm_debug_otput, flags=re.MULTILINE)
     result = re.sub("^\!llvm\..*\n", "", result, flags=re.MULTILINE )
-    return result
+    return result.rstrip()
 
 def compile_files(folder_path, optimization_level):
     source_files = ""
@@ -227,7 +263,15 @@ def compile_files(folder_path, optimization_level):
     connected_files_non_lto = connect_source_llvm(string_non_lto)
     connected_files_lto = connect_source_llvm(string_lto)
     source_files_list = source_files.split()
-    show_files(trim_debug_info(string_lto),trim_debug_info(string_non_lto), (connected_files_lto,connected_files_non_lto), source_files_list)
+    diff_file_non_lto = trim_debug_info(generate_diff_string(string_non_lto, connected_files_non_lto))
+    diff_file_lto = trim_debug_info(generate_diff_string(string_lto, connected_files_lto))
+
+    file_lto, filename_lto = tempfile.mkstemp()
+    file_non_lto, filename_non_lto = tempfile.mkstemp()
+    os.write(file_lto, diff_file_lto.encode())
+    os.write(file_non_lto, diff_file_non_lto.encode())
+
+    show_files(trim_debug_info(string_lto),trim_debug_info(string_non_lto), (connected_files_lto,connected_files_non_lto), source_files_list, filename_lto, filename_non_lto)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
