@@ -14,6 +14,8 @@ Trenutno podrzani su iskljucivo programi pisani u programskom jeziku C++.
 clang-9
 wllvm
 python3
+kompare
+
 
 ### Primer pokretanja
 python3 -i {path_to_dir_with_cpp_files} -o {optimization_level('0', '1', '2', '3', '4', 'z', 'g', 'z', 'fast)}
@@ -27,4 +29,6 @@ Izvrsenjem komande iznad dobija se ovakav prikaz.
 Kao sto vidimo ovde je prikaz fajla main.cpp i odgovarajucih linija u llvm ir fajlovima.
 Klikom na dugme, prelazimo na sledeci fajl, to jest fajl a.cpp
 ![Alt text](a.png "a.cpp")
-
+Klikom na dugme Show diff dobijamo prikaz razlika izmedju LTO i non LTO llvm ir fajlovima,
+u alatu kompare.
+![Alt text](diff.png "diff")
