@@ -5,7 +5,8 @@ import subprocess
 import tempfile
 import tkinter as tk
 import re
-
+import difflib
+from datetime import datetime, timezone
 
 COLORS = ['alice blue', 'lavender', 'slate gray',
     'pale turquoise', 'turquoise',
@@ -39,6 +40,7 @@ class ColorLineConnect:
 color_line_map = ColorLineConnect()
 llvm_debug_line_map = {}
 next_source_file_index = 0
+encoded_real_instruction_map = {}
 
 class SourceFileConnect:
     def __init__(self, name) :
@@ -51,7 +53,11 @@ class SourceFileConnect:
         else: 
             self.map[key] = [value]
             #color_index = color_index if color_index >= len(COLORS) else 0
-        
+
+def file_mtime(path):
+    t = datetime.fromtimestamp(os.stat(path).st_mtime,
+                               timezone.utc)
+    return t.astimezone().isoformat()        
 
 def compile_lto(source_files, optimization_level):
     tmp_folder = tempfile.mkdtemp()
@@ -126,6 +132,7 @@ def generate_diff_string(llvm_ir, connected_files):
                             curr_line = curr_line[:-2]
                         result += connected_file.source_file_name + ":" + key + ":" + curr_line.lstrip()
                         is_found = True
+                        encoded_real_instruction_map[connected_file.source_file_name + ":" + key + ":" + curr_line.lstrip()] = line
                         
         if not is_found:
             result += line
@@ -218,8 +225,32 @@ def insert_text(non_lto_text_widget, string_non_lto, lto_text_widget, string_lto
     source_text_widget.configure(state=tk.DISABLED)
 
 def show_diff(lto_diff_file, non_lto_diff_file):
-    subprocess.check_output("kompare {non_lto} {lto} ".format(non_lto=non_lto_diff_file, lto=lto_diff_file), shell=True)
+    file_diff, filename_diff = tempfile.mkstemp()
+    temp = tempfile.NamedTemporaryFile()
 
+    lto_diff_file.seek(0)
+    lto_diff_string = lto_diff_file.read()
+    non_lto_diff_file.seek(0)
+    non_lto_diff_string = non_lto_diff_file.read()
+
+    lto_diff_string = lto_diff_string.decode("utf-8")
+    non_lto_diff_string = non_lto_diff_string.decode("utf-8")
+
+    todate = file_mtime(lto_diff_file.name)
+    fromdate = file_mtime(non_lto_diff_file.name)
+    
+
+    for line in difflib.unified_diff(non_lto_diff_string.splitlines(keepends=True),lto_diff_string.splitlines(keepends=True), 
+                    fromfiledate=fromdate, tofiledate=todate, fromfile=non_lto_diff_file.name, tofile=lto_diff_file.name):
+        if (line[0] == "+" or line[0] == "-") and (line[1] != "-" and line[1]!="+"):
+            if line[1:-1] in encoded_real_instruction_map.keys():
+                real_line = encoded_real_instruction_map[line[1:-1]] 
+                line = line[0] + real_line + line[-1]
+        temp.write(line.encode())
+
+    temp.seek(0)
+    #print(temp.read().decode("utf-8"))
+    subprocess.check_output("kompare {out}".format(out=temp.name), shell=True)
 
 def show_files(string_lto, string_non_lto, connected_files, source_files, lto_diff_file, non_lto_diff_file):
     root = tk.Tk()
@@ -266,12 +297,12 @@ def compile_files(folder_path, optimization_level):
     diff_file_non_lto = trim_debug_info(generate_diff_string(string_non_lto, connected_files_non_lto))
     diff_file_lto = trim_debug_info(generate_diff_string(string_lto, connected_files_lto))
 
-    file_lto, filename_lto = tempfile.mkstemp()
-    file_non_lto, filename_non_lto = tempfile.mkstemp()
-    os.write(file_lto, diff_file_lto.encode())
-    os.write(file_non_lto, diff_file_non_lto.encode())
+    file_lto = tempfile.NamedTemporaryFile()
+    file_non_lto = tempfile.NamedTemporaryFile()
+    file_lto.write(diff_file_lto.encode())
+    file_non_lto.write(diff_file_non_lto.encode())
 
-    show_files(trim_debug_info(string_lto),trim_debug_info(string_non_lto), (connected_files_lto,connected_files_non_lto), source_files_list, filename_lto, filename_non_lto)
+    show_files(trim_debug_info(string_lto),trim_debug_info(string_non_lto), (connected_files_lto,connected_files_non_lto), source_files_list, file_lto, file_non_lto)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
