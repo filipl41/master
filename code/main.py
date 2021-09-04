@@ -52,7 +52,6 @@ class SourceFileConnect:
             self.map[key].append(value)
         else: 
             self.map[key] = [value]
-            #color_index = color_index if color_index >= len(COLORS) else 0
 
 def file_mtime(path):
     t = datetime.fromtimestamp(os.stat(path).st_mtime,
@@ -99,20 +98,18 @@ def connect_source_llvm(llvm_ir_output):
         for llvm_line, source_line  in matches:
             source_llvm_map[key].insert(source_line, llvm_line)
             color_line_map.insert(source_line)
-
+    
     for values in source_llvm_map.values():
         new_values = []
         for scope_values in values.map.values():
             for scope_value in  scope_values:
-                matches = re.findall("(\![0-9]+).*line: ([0-9]+).*scope: {scope}.*".format(scope=scope_value), llvm_ir_output)
+                matches = re.findall("(\![0-9]+).*line: ([0-9]+).*scope: {scope}(?![0-9]).*".format(scope=scope_value), llvm_ir_output)
                 for llvm_line, source_line in matches:
                     new_values.append((source_line, llvm_line))
         for source_line, llvm_line in new_values:
             values.insert(source_line, llvm_line)
             color_line_map.insert(source_line)
         
-       
-
     return source_llvm_map.values()
 
 def generate_diff_string(llvm_ir, connected_files):
@@ -121,18 +118,19 @@ def generate_diff_string(llvm_ir, connected_files):
     string_list = string_list[2:]
     for line in string_list:
         is_found = False
-        for connected_file in connected_files:
-            for key, values in connected_file.map.items():
-                for value in values :
-                    match = re.search(".*\!dbg {value}.*".format(value=value), line)
+        for connected_file in connected_files :
+            for key  in connected_file.map.keys():
+                for value in connected_file.map[key]:                
+                    match = re.search(".*\!dbg {value}(?![0-9]).*".format(value=value), line)
                     if match:
-                        curr_line = re.sub("\!dbg {value}.*".format(value=value), "", line)
+                        curr_line = re.sub("\!dbg {value}(?![0-9]).*".format(value=value), "", line)
                         curr_line = re.sub("%[0-9]+ = ", "", curr_line)
                         if curr_line[-2] == ",":
                             curr_line = curr_line[:-2]
                         result += connected_file.source_file_name + ":" + key + ":" + curr_line.lstrip()
                         is_found = True
                         encoded_real_instruction_map[connected_file.source_file_name + ":" + key + ":" + curr_line.lstrip()] = line
+                        
                         
         if not is_found:
             result += line
@@ -157,7 +155,7 @@ def parse_and_highlight_llvm(string_code, text_widget, connected_files, curr_sou
     for code_line in string_list:
         for key, value_list in curr_connected_file.map.items():
                 for value in value_list:
-                    match = re.search(".*\!dbg {dbg_num}.*".format(dbg_num=value), code_line)
+                    match = re.search(".*\!dbg {dbg_num}(?![0-9]).*".format(dbg_num=value), code_line)
                     if match:
                         debug = re.search(".*@llvm\.dbg\..*", code_line)
                         if debug:
@@ -246,6 +244,7 @@ def show_diff(lto_diff_file, non_lto_diff_file):
             if line[1:-1] in encoded_real_instruction_map.keys():
                 real_line = encoded_real_instruction_map[line[1:-1]] 
                 line = line[0] + real_line + line[-1]
+                
         temp.write(line.encode())
 
     temp.seek(0)
