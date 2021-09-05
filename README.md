@@ -15,6 +15,9 @@ clang-9
 wllvm
 python3
 kompare
+python3-tk
+llvm
+
 
 
 ### Primer pokretanja
