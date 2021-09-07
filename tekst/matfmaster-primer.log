@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2021.9.4)  6 SEP 2021 14:04
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2021.9.4)  7 SEP 2021 11:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1338,13 +1338,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 2.
 ) [3
 
-]
-Overfull \hbox (15.32568pt too wide) in paragraph at lines 103--133
-\T2A/cmr/m/n/12 У глави 4 биЈе при-ка-зан нови при-ступ оп-ти-ми-за-циjи це-ло-
-ви-тог про-грама ThinLTO,
- []
-
-[1
+] [1
 
 
 ] [2] [3
@@ -1462,7 +1456,7 @@ Overfull \hbox (0.97559pt too wide) in paragraph at lines 1241--1268
 [36
 
 ]
-Overfull \hbox (28.38542pt too wide) in paragraph at lines 1300--1309
+Overfull \hbox (28.38542pt too wide) in paragraph at lines 1300--1307
 []\T2A/cmr/m/n/12 Друга функ-ци-о-нал-ност jе при-ка-зи-ва»е гра-фич-ког diff-a
  уну-тар алата kompare[25].
  []
@@ -1471,111 +1465,111 @@ Overfull \hbox (28.38542pt too wide) in paragraph at lines 1300--1309
 <a_cpp.png, id=810, 1859.94875pt x 1056.94875pt>
 File: a_cpp.png Graphic file (type png)
 <use a_cpp.png>
-Package pdftex.def Info: a_cpp.png  used on input line 1372.
+Package pdftex.def Info: a_cpp.png  used on input line 1371.
 (pdftex.def)             Requested size: 340.8013pt x 193.66164pt.
  [39 <./a_cpp.png>]
 <main_cpp.png, id=835, 1859.94875pt x 1056.94875pt>
 File: main_cpp.png Graphic file (type png)
 <use main_cpp.png>
-Package pdftex.def Info: main_cpp.png  used on input line 1390.
+Package pdftex.def Info: main_cpp.png  used on input line 1389.
 (pdftex.def)             Requested size: 340.8013pt x 193.66164pt.
 <diff_1.png, id=836, 1842.885pt x 683.55376pt>
 File: diff_1.png Graphic file (type png)
 <use diff_1.png>
-Package pdftex.def Info: diff_1.png  used on input line 1401.
+Package pdftex.def Info: diff_1.png  used on input line 1400.
 (pdftex.def)             Requested size: 340.8013pt x 126.4033pt.
 <diff_2.png, id=837, 1852.9225pt x 665.48625pt>
 File: diff_2.png Graphic file (type png)
 <use diff_2.png>
-Package pdftex.def Info: diff_2.png  used on input line 1407.
+Package pdftex.def Info: diff_2.png  used on input line 1406.
 (pdftex.def)             Requested size: 340.8013pt x 122.39206pt.
  [40 <./main_cpp.png> <./diff_1.png>] [41 <./diff_2.png>] [42
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 1452--1453
+Underfull \hbox (badness 10000) in paragraph at lines 1451--1452
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1454--1455
+Underfull \hbox (badness 10000) in paragraph at lines 1453--1454
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1456--1457
+Underfull \hbox (badness 10000) in paragraph at lines 1455--1456
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1458--1459
+Underfull \hbox (badness 10000) in paragraph at lines 1457--1458
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1460--1461
+Underfull \hbox (badness 10000) in paragraph at lines 1459--1460
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1462--1463
+Underfull \hbox (badness 10000) in paragraph at lines 1461--1462
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1464--1465
+Underfull \hbox (badness 10000) in paragraph at lines 1463--1464
 
  []
 
 
-Overfull \hbox (37.55037pt too wide) in paragraph at lines 1466--1467
+Overfull \hbox (37.55037pt too wide) in paragraph at lines 1465--1466
 []\T2A/cmr/m/n/12 [8] Just In Time Compilation -- https://en.wikipedia.org/wiki
 /Just-in-time_compilation 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1466--1467
+Underfull \hbox (badness 10000) in paragraph at lines 1465--1466
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1468--1469
+Underfull \hbox (badness 10000) in paragraph at lines 1467--1468
 
  []
 
 
-Overfull \hbox (9.75293pt too wide) in paragraph at lines 1470--1471
+Overfull \hbox (9.75293pt too wide) in paragraph at lines 1469--1470
 []\T2A/cmr/m/n/12 [10] Link Time Optimization -- https://llvm.org/docs/LinkTime
 Optimization.html 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1470--1471
+Underfull \hbox (badness 10000) in paragraph at lines 1469--1470
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1472--1473
+Underfull \hbox (badness 10000) in paragraph at lines 1471--1472
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1474--1475
+Underfull \hbox (badness 10000) in paragraph at lines 1473--1474
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1476--1477
+Underfull \hbox (badness 10000) in paragraph at lines 1475--1476
 
  []
 
 
-Overfull \hbox (29.0399pt too wide) in paragraph at lines 1478--1479
+Overfull \hbox (29.0399pt too wide) in paragraph at lines 1477--1478
 []\T2A/cmr/m/n/12 [14] Function inlining -- https://www.cs.cornell.edu/courses/
 cs6120/2019fa/blog/llvm-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1478--1479
+Underfull \hbox (badness 10000) in paragraph at lines 1477--1478
 
  []
 
@@ -1583,92 +1577,103 @@ Underfull \hbox (badness 10000) in paragraph at lines 1478--1479
 
 
 ]
-Overfull \hbox (6.22467pt too wide) in paragraph at lines 1480--1481
+Overfull \hbox (6.22467pt too wide) in paragraph at lines 1479--1480
 []\T2A/cmr/m/n/12 [15] Indirect branch instructions -- https://en.wikipedia.org
 /wiki/Indirect_branch 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1480--1481
+Underfull \hbox (badness 10000) in paragraph at lines 1479--1480
 
  []
 
 
-Overfull \hbox (19.47705pt too wide) in paragraph at lines 1482--1483
+Overfull \hbox (19.47705pt too wide) in paragraph at lines 1481--1482
 []\T2A/cmr/m/n/12 [16] Dead code elimination -- https://en.wikipedia.org/wiki/D
 ead_code_elimination 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1482--1483
+Underfull \hbox (badness 10000) in paragraph at lines 1481--1482
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1484--1485
+Underfull \hbox (badness 10000) in paragraph at lines 1483--1484
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1486--1487
+Underfull \hbox (badness 10000) in paragraph at lines 1485--1486
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1488--1489
+Underfull \hbox (badness 10000) in paragraph at lines 1487--1488
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1490--1491
+Underfull \hbox (badness 10000) in paragraph at lines 1489--1490
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1492--1493
+Underfull \hbox (badness 10000) in paragraph at lines 1491--1492
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1494--1495
+Underfull \hbox (badness 10000) in paragraph at lines 1493--1494
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1496--1497
+Underfull \hbox (badness 10000) in paragraph at lines 1495--1496
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1498--1499
+Underfull \hbox (badness 10000) in paragraph at lines 1497--1498
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1500--1501
+Underfull \hbox (badness 10000) in paragraph at lines 1499--1500
 
  []
 
 
-Overfull \hbox (71.68666pt too wide) in paragraph at lines 1502--1503
+Overfull \hbox (71.68666pt too wide) in paragraph at lines 1501--1502
 []\T2A/cmr/m/n/12 [26] Undefined behavior in theory and practice -- https://que
 ue.acm.org/detail.cfm?id=3468263 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1502--1503
+Underfull \hbox (badness 10000) in paragraph at lines 1501--1502
 
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1503--1504
+
+ []
+
+
+Overfull \hbox (26.92105pt too wide) in paragraph at lines 1505--1506
+[]\T2A/cmr/m/n/12 [28] Clang optimization levels -- https://stackoverflow.com/q
+uestions/15548023/clang-
  []
 
 [44]
 \tf@toc=\write5
 \openout5 = `matfmaster-primer.toc'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1506.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1506.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1507.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1507.
  (./matfmaster-primer.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1506.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1506.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1507.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1507.
 
 Package rerunfilecheck Info: File `matfmaster-primer.out' has not changed.
 (rerunfilecheck)             Checksum: 5420FF1898E33927F73DCB00C672954B;3162.
@@ -1707,7 +1712,7 @@ e/filip/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx1440.600pk> </home
 filip/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm2074.600pk> </home/f
 ilip/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1728.600pk></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on matfmaster-primer.pdf (47 pages, 2857463 bytes).
+Output written on matfmaster-primer.pdf (47 pages, 2857603 bytes).
 PDF statistics:
  1553 PDF objects out of 1728 (max. 8388607)
  959 compressed objects within 10 object streams
