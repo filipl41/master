@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2021.9.4)  21 SEP 2021 11:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2021.9.4)  21 SEP 2021 12:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1851,7 +1851,7 @@ LaTeX Warning: There were multiply-defined labels.
 Here is how much of TeX's memory you used:
  17595 strings out of 493820
  244066 string characters out of 6156178
- 516822 words of memory out of 5000000
+ 516800 words of memory out of 5000000
  20127 multiletter control sequences out of 15000+600000
  19866 words of font info for 42 fonts, out of 8000000 for 9000
  766 hyphenation exceptions out of 8191
@@ -1872,9 +1872,9 @@ lip/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx1440.600pk> </home/fil
 ip/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1440.600pk> </home/fili
 p/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm2074.600pk> </home/filip
 /.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1728.600pk>
-Output written on matfmaster-primer.pdf (47 pages, 1712666 bytes).
+Output written on matfmaster-primer.pdf (47 pages, 1711578 bytes).
 PDF statistics:
- 1667 PDF objects out of 1728 (max. 8388607)
+ 1664 PDF objects out of 1728 (max. 8388607)
  938 compressed objects within 10 object streams
  581 named destinations out of 1000 (max. 500000)
  176 words of extra memory for PDF output out of 10000 (max. 10000000)
