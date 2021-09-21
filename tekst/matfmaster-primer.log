@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2021.9.4)  21 SEP 2021 03:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2021.9.4)  21 SEP 2021 05:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1348,9 +1348,15 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 172.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <5> on input line 172.
+
+Overfull \hbox (3.41043pt too wide) in paragraph at lines 183--185
+[]\T2A/cmr/m/n/12 Да би при-ка-зали како из-гледа тек-сту-ални фор-мат ме-ўу-ре
+-пре-зен-та-циjе LLVM,
+ []
+
 LaTeX Font Info:    Try loading font information for T2A+cmtt on input line 185
 .
- (/usr/share/texlive/texmf-dist/tex/latex/cyrillic/t2acmtt.fd
+(/usr/share/texlive/texmf-dist/tex/latex/cyrillic/t2acmtt.fd
 File: t2acmtt.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
 )
 Package csquotes Info: Input encoding change on input line 185.
@@ -1368,8 +1374,14 @@ Package csquotes Info: Deallocating character " on input line 197.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
 File: utf8.def 2017/01/28 v1.1t UTF-8 support for inputenc
-) [5]
-<LLVMCompiler1.png, id=171, 560.0925pt x 206.7725pt>
+)
+Overfull \hbox (2.2608pt too wide) in paragraph at lines 220--222
+[]\T2A/cmr/m/n/12 Меўурепрезентациjа LLVM jе асем-блер-ски фор-мат сли-чан ап-с
+тракт-ном RISC
+ []
+
+[5]
+<LLVMCompiler1.png, id=172, 560.0925pt x 206.7725pt>
 File: LLVMCompiler1.png Graphic file (type png)
 <use LLVMCompiler1.png>
 Package pdftex.def Info: LLVMCompiler1.png  used on input line 247.
@@ -1430,7 +1442,7 @@ lto_module_get_symbol_attribute  \T2A/cmr/m/n/12 libLTO би-
 
 [13]
 Overfull \hbox (5.53217pt too wide) in paragraph at lines 513--521
-\T2A/cmr/m/n/12 за-циjу и ге-не-ра-тор к^^Boда над битк^^Boд фаj-ло-вима функ-ц
+\T2A/cmr/m/n/12 за-циjу и ге-не-ра-тор к^^Boда над фаj-ло-вима битк^^Boд функ-ц
 и-jом \T2A/cmtt/m/n/12 lto_codegen_compile\T2A/cmr/m/n/12 ,
  []
 
@@ -1631,18 +1643,18 @@ File: main_cpp.png Graphic file (type png)
 <use main_cpp.png>
 Package pdftex.def Info: main_cpp.png  used on input line 1409.
 (pdftex.def)             Requested size: 340.8013pt x 193.66164pt.
-<diff_1x.png, id=809, 812.03375pt x 301.125pt>
-File: diff_1x.png Graphic file (type png)
-<use diff_1x.png>
-Package pdftex.def Info: diff_1x.png  used on input line 1420.
-(pdftex.def)             Requested size: 340.8013pt x 126.37514pt.
+<diff_1.png, id=809, 1842.885pt x 683.55376pt>
+File: diff_1.png Graphic file (type png)
+<use diff_1.png>
+Package pdftex.def Info: diff_1.png  used on input line 1420.
+(pdftex.def)             Requested size: 340.8013pt x 126.4033pt.
 <diff_2.png, id=810, 1852.9225pt x 665.48625pt>
 File: diff_2.png Graphic file (type png)
 <use diff_2.png>
 Package pdftex.def Info: diff_2.png  used on input line 1426.
 (pdftex.def)             Requested size: 340.8013pt x 122.39206pt.
 
-[39 <./main_cpp.png> <./diff_1x.png>] [40 <./diff_2.png>] [41
+[39 <./main_cpp.png> <./diff_1.png>] [40 <./diff_2.png>] [41
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 1476--1477
@@ -1838,7 +1850,7 @@ LaTeX Warning: There were multiply-defined labels.
  ) 
 Here is how much of TeX's memory you used:
  17596 strings out of 493820
- 244077 string characters out of 6156178
+ 244072 string characters out of 6156178
  516615 words of memory out of 5000000
  20128 multiletter control sequences out of 15000+600000
  19866 words of font info for 42 fonts, out of 8000000 for 9000
@@ -1861,7 +1873,7 @@ ip/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1440.600pk> </home/fili
 p/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm2074.600pk> </home/filip
 /.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1728.600pk></usr/share/te
 xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb>
-Output written on matfmaster-primer.pdf (47 pages, 1622582 bytes).
+Output written on matfmaster-primer.pdf (47 pages, 1720947 bytes).
 PDF statistics:
  1671 PDF objects out of 1728 (max. 8388607)
  941 compressed objects within 10 object streams
