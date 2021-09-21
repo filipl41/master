@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2021.9.4)  20 SEP 2021 16:14
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2021.9.4)  21 SEP 2021 03:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1631,18 +1631,18 @@ File: main_cpp.png Graphic file (type png)
 <use main_cpp.png>
 Package pdftex.def Info: main_cpp.png  used on input line 1409.
 (pdftex.def)             Requested size: 340.8013pt x 193.66164pt.
-<diff_1.png, id=809, 1842.885pt x 683.55376pt>
-File: diff_1.png Graphic file (type png)
-<use diff_1.png>
-Package pdftex.def Info: diff_1.png  used on input line 1420.
-(pdftex.def)             Requested size: 340.8013pt x 126.4033pt.
+<diff_1x.png, id=809, 812.03375pt x 301.125pt>
+File: diff_1x.png Graphic file (type png)
+<use diff_1x.png>
+Package pdftex.def Info: diff_1x.png  used on input line 1420.
+(pdftex.def)             Requested size: 340.8013pt x 126.37514pt.
 <diff_2.png, id=810, 1852.9225pt x 665.48625pt>
 File: diff_2.png Graphic file (type png)
 <use diff_2.png>
 Package pdftex.def Info: diff_2.png  used on input line 1426.
 (pdftex.def)             Requested size: 340.8013pt x 122.39206pt.
 
-[39 <./main_cpp.png> <./diff_1.png>] [40 <./diff_2.png>] [41
+[39 <./main_cpp.png> <./diff_1x.png>] [40 <./diff_2.png>] [41
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 1476--1477
@@ -1665,24 +1665,13 @@ Underfull \hbox (badness 10000) in paragraph at lines 1484--1485
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1486--1487
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1488--1489
+Underfull \hbox (badness 10000) in paragraph at lines 1486--1489
 
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 1490--1491
 
- []
-
-
-Overfull \hbox (37.55037pt too wide) in paragraph at lines 1492--1493
-[]\T2A/cmr/m/n/12 [8] Just In Time Compilation -- https://en.wikipedia.org/wiki
-/Just-in-time_compilation 
  []
 
 
@@ -1696,14 +1685,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 1494--1495
  []
 
 
-Overfull \hbox (9.75293pt too wide) in paragraph at lines 1496--1497
-[]\T2A/cmr/m/n/12 [10] Link Time Optimization -- https://llvm.org/docs/LinkTime
-Optimization.html 
+Underfull \hbox (badness 10000) in paragraph at lines 1496--1497
+
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1496--1497
-
+Overfull \hbox (9.75293pt too wide) in paragraph at lines 1498--1499
+[]\T2A/cmr/m/n/12 [10] Link Time Optimization -- https://llvm.org/docs/LinkTime
+Optimization.html 
  []
 
 
@@ -1716,18 +1705,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 1500--1501
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 1502--1503
-
- []
-
 [42
 
 
 ]
-Overfull \hbox (29.0399pt too wide) in paragraph at lines 1504--1505
-[]\T2A/cmr/m/n/12 [14] Function inlining -- https://www.cs.cornell.edu/courses/
-cs6120/2019fa/blog/llvm-
+Underfull \hbox (badness 10000) in paragraph at lines 1502--1503
+
  []
 
 
@@ -1736,9 +1719,9 @@ Underfull \hbox (badness 10000) in paragraph at lines 1504--1505
  []
 
 
-Overfull \hbox (63.98149pt too wide) in paragraph at lines 1506--1507
-[]\T2A/cmr/m/n/12 [15] The Architecture of Open Source Applications --https://w
-ww.aosabook.org/en/llvm.html 
+Overfull \hbox (29.0399pt too wide) in paragraph at lines 1506--1507
+[]\T2A/cmr/m/n/12 [14] Function inlining -- https://www.cs.cornell.edu/courses/
+cs6120/2019fa/blog/llvm-
  []
 
 
@@ -1747,9 +1730,9 @@ Underfull \hbox (badness 10000) in paragraph at lines 1506--1507
  []
 
 
-Overfull \hbox (19.47705pt too wide) in paragraph at lines 1508--1509
-[]\T2A/cmr/m/n/12 [16] Dead code elimination -- https://en.wikipedia.org/wiki/D
-ead_code_elimination 
+Overfull \hbox (63.98149pt too wide) in paragraph at lines 1508--1509
+[]\T2A/cmr/m/n/12 [15] The Architecture of Open Source Applications --https://w
+ww.aosabook.org/en/llvm.html 
  []
 
 
@@ -1803,14 +1786,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 1526--1527
  []
 
 
-Overfull \hbox (71.68666pt too wide) in paragraph at lines 1528--1529
-[]\T2A/cmr/m/n/12 [26] Undefined behavior in theory and practice -- https://que
-ue.acm.org/detail.cfm?id=3468263 
+Underfull \hbox (badness 10000) in paragraph at lines 1528--1529
+
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1528--1529
-
+Overfull \hbox (71.68666pt too wide) in paragraph at lines 1530--1531
+[]\T2A/cmr/m/n/12 [26] Undefined behavior in theory and practice -- https://que
+ue.acm.org/detail.cfm?id=3468263 
  []
 
 
@@ -1818,21 +1801,26 @@ Underfull \hbox (badness 10000) in paragraph at lines 1530--1531
 
  []
 
+[43]
+Underfull \hbox (badness 10000) in paragraph at lines 1532--1533
 
-Overfull \hbox (26.92105pt too wide) in paragraph at lines 1532--1533
+ []
+
+
+Overfull \hbox (26.92105pt too wide) in paragraph at lines 1534--1535
 []\T2A/cmr/m/n/12 [28] Clang optimization levels -- https://stackoverflow.com/q
 uestions/15548023/clang-
  []
 
-[43]
+[44]
 \tf@toc=\write5
 \openout5 = `matfmaster-primer.toc'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1534.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1534.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1536.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1536.
  (./matfmaster-primer.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1534.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1534.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1536.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1536.
 
 Package rerunfilecheck Info: File `matfmaster-primer.out' has not changed.
 (rerunfilecheck)             Checksum: 9B73C18E525B02055693CC99E9F0CACE;3130.
@@ -1849,8 +1837,8 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 17595 strings out of 493820
- 244065 string characters out of 6156178
+ 17596 strings out of 493820
+ 244077 string characters out of 6156178
  516615 words of memory out of 5000000
  20128 multiletter control sequences out of 15000+600000
  19866 words of font info for 42 fonts, out of 8000000 for 9000
@@ -1873,10 +1861,10 @@ ip/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1440.600pk> </home/fili
 p/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm2074.600pk> </home/filip
 /.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1728.600pk></usr/share/te
 xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb>
-Output written on matfmaster-primer.pdf (46 pages, 1719054 bytes).
+Output written on matfmaster-primer.pdf (47 pages, 1622582 bytes).
 PDF statistics:
- 1663 PDF objects out of 1728 (max. 8388607)
- 938 compressed objects within 10 object streams
- 580 named destinations out of 1000 (max. 500000)
+ 1671 PDF objects out of 1728 (max. 8388607)
+ 941 compressed objects within 10 object streams
+ 581 named destinations out of 1000 (max. 500000)
  176 words of extra memory for PDF output out of 10000 (max. 10000000)
 
