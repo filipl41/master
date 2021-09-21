@@ -48,6 +48,7 @@
 % Ostali paketi koji se koriste u dokumentu
 \usepackage{listings} % listing programskog koda
 \lstset{basicstyle=\ttfamily\footnotesize,breaklines=true,inputencoding=utf8}
+\renewcommand{\lstlistingname}{Листинг}
 % Datoteka sa literaturom u BibTex tj. BibLaTeX/Biber formatu
 \bib{matfmaster-primer}
 
@@ -194,7 +195,7 @@ unsigned add2(unsigned a, unsigned b) {
 \end{lstlisting}
 \pagebreak
 Ове две функције се преводе у наредни к\^{o}д.
-\begin{lstlisting}[frame=single,caption={Kod preuzet sa članka  \textit{LLVM - The archicture of open source applications} [15]}, captionpos=b]
+\begin{lstlisting}[frame=single,caption={К\^{o}д преузет са чланка  \textit{LLVM - The archicture of open source applications} [15]}, captionpos=b]
 define i32 @add1(i32 %a, i32 %b) {
 entry:
   %tmp1 = add i32 %a, %b
@@ -330,7 +331,7 @@ PowerPC, SPARC.
 У наредном примеру биће показано због чега оптимизација целовитог програма 
 може бити корисна.
 
-\begin{lstlisting}[frame=single,caption={Primer pozivanja funkcije bez tela}, captionpos=b]
+\begin{lstlisting}[frame=single,caption={Пример позивања функције без тела}, captionpos=b]
 //a.h                             //a.cpp
 void do_nothing();                void do_nothing(){} 
 
@@ -347,7 +348,7 @@ int main(){
 У листингу 3.1  функција  \texttt{do{\_}nothing} има празно тело.
 Уколико овај к\^{o}д преведемо са оптимизацијом -О3, без оптимизације целовитог програма, добићемо  резултат приказан у листингу 3.2:
 
-\begin{lstlisting}[frame=single, caption={Rezultat bez optimizacije celovitog programa}, captionpos=b]
+\begin{lstlisting}[frame=single, caption={Резултат са оптимизацијом целовитог програма}, captionpos=b]
 clang++  main.cpp a.cpp  -O3 -g
 time ./a.out 
 real    0m1,022s
@@ -357,7 +358,7 @@ sys     0m0,000s
 
 Може се приметити да је рачунару било потребно више од једне секунде да изврши програм који не ради ништа.
 У наставку ћемо исте фајлове превести са оптимизацијом целовитог програма:
-\begin{lstlisting}[frame=single, caption={Rezultat sa optimizacijom celovitog programa}, captionpos=b]
+\begin{lstlisting}[frame=single, caption={Резултат без оптимизације целовитог програма}, captionpos=b]
 clang++  main.cpp a.cpp  -O3 -flto=full -g
 time ./a.out 
 real    0m0,003s
@@ -368,7 +369,7 @@ sys     0m0,000s
 Разлика у времену извршавања је незанемарљива, као што се може видети у листингу 3.3.
 У листингу 3.4 имамо приказ међурепрезентације LLVM  без и са укљученом оптмизацијом целовитог програма
 и биће анализиране разлике између њих.
-\begin{lstlisting}[frame=single, caption={Međureprezentacija bez optimizacije celovitog programa}, captionpos=b]
+\begin{lstlisting}[frame=single, caption={Међурепрезентација без оптимизације целовитог програма}, captionpos=b]
 ; Function Attrs: norecurse uwtable
 define i32 @main() local_unnamed_addr #0 !dbg !9 {
   call void @llvm.dbg.value(metadata i32 0, 
@@ -401,7 +402,7 @@ define void @_Z10do_nothingv() local_unnamed_addr #2
 \end{lstlisting}
 
 
-\begin{lstlisting}[frame=single, caption={Međureprezentacija sa optimizacijom celovitog programa}, captionpos=b]
+\begin{lstlisting}[frame=single, caption={Међурепрезентација са оптимизацијом целовитог програма}, captionpos=b]
 ; Function Attrs: norecurse nounwind readnone uwtable
 define dso_local i32 @main() local_unnamed_addr #0 
 !dbg !9 {
@@ -613,7 +614,7 @@ libLTO библиотеке да би добио све дефинисане  с
 У наставку биће приказан један пример где је могуће извршити уметање уколико
 је укључена оптимизација целовитог програма.
 
-\begin{lstlisting}[frame=single,caption={Primer umetanja funkcije}, captionpos=b]
+\begin{lstlisting}[frame=single,caption={Пример уметања функције}, captionpos=b]
 //square.hpp           
 int square(int);         
     					
@@ -640,7 +641,7 @@ int main(){
 У наставку приказаћемо разлике међурепрезентације LLVM без и са оптимизације
 целовитог програма. Преведен\footnote{сви примери у раду преведени су компајлером Clang са нивоом оптимизације -О3 и опцијом -g.} је к\^{o}д из листинга 3.6.
 
-\begin{lstlisting}[frame=single,caption={Međureprezentacija bez optimizacije celovitog programa }, captionpos=b]
+\begin{lstlisting}[frame=single,caption={Међурепрезентација без оптимизације целовитог програма}, captionpos=b]
  Function Attrs: norecurse uwtable
 define i32 @main() local_unnamed_addr #4 !dbg !966 {
   call void @llvm.dbg.value(metadata i32 0, 
@@ -693,7 +694,7 @@ define i32 @_Z6squarei(i32) local_unnamed_addr
 }
 \end{lstlisting}
 
-\begin{lstlisting}[frame=single,caption={Međureprezentacija sa optimizacijom celovitog programa }, captionpos=b]
+\begin{lstlisting}[frame=single,caption={Међурепрезентација са оптимизацијом целовитог програма}, captionpos=b]
 ; Function Attrs: norecurse uwtable
 define dso_local i32 @main() local_unnamed_addr 
 #4 !dbg !966 {
@@ -765,7 +766,7 @@ tail call dereferenceable(272) %"class.std::basic_ostream"*
 у којем је компајлер уклонио функцију \texttt{square} јер се није користила. Програм
 у листингу 3.9 приказаће ово на неколико очигледнијих примера:
 
-\begin{lstlisting}[frame=single,caption={Primer eliminacije mrtvog koda}, captionpos=b]
+\begin{lstlisting}[frame=single,caption={Пример елиминације мртвог к\^{o}да}, captionpos=b]
 //a.hpp
 int foo1(void);
 void foo2(void);
@@ -809,7 +810,7 @@ int main() {
 
 \end{lstlisting}
 
-\begin{lstlisting}[frame=single,caption={Međureprezentacija bez optimizacije celovitog programa }, captionpos=b]
+\begin{lstlisting}[frame=single,caption={Међурепрезентација без оптимизације целовитог програма}, captionpos=b]
  Function Attrs: uwtable
 
 declare dereferenceable(272) 
@@ -874,7 +875,7 @@ define i32 @_Z4foo1v() local_unnamed_addr #0 !dbg !1059 {
 \end{lstlisting}
 
 
-\begin{lstlisting}[frame=single,caption={Međureprezentacija sa optimizacijom celovitog programa }, captionpos=b]
+\begin{lstlisting}[frame=single,caption={Међурепрезентација са оптимизацијом целовитог програма }, captionpos=b]
 ; Function Attrs: norecurse nounwind readnone uwtable
 define dso_local i32 @main() local_unnamed_addr #4 
 !dbg !982 {
@@ -919,7 +920,7 @@ define dso_local i32 @main() local_unnamed_addr #4
  Уколико је компајлеру познат динамички тип објекта при компајлирању, он може 
  да девиртуализује позив функције.
  
- \begin{lstlisting}[frame=single,caption={Poznat dinamički tip objekta }, captionpos=b]
+ \begin{lstlisting}[frame=single,caption={Пример са познатим динамичким типом објекта }, captionpos=b]
 #include <iostream>
 struct Base{
     virtual int f(){return 1;}
@@ -937,7 +938,7 @@ int main(){
 }
  \end{lstlisting}
  
- \begin{lstlisting}[frame=single,caption={Međureprezentacija programa iz listinga 3.12}, captionpos=b]
+ \begin{lstlisting}[frame=single,caption={Међурепрезентација програма из листинга 3.12}, captionpos=b]
 ; Function Attrs: norecurse uwtable
 define i32 @main() local_unnamed_addr #4 !dbg !964 {
   call void @llvm.dbg.value(metadata %struct.Derived* undef,
@@ -970,7 +971,7 @@ define i32 @main() local_unnamed_addr #4 !dbg !964 {
  или да се из те класе не може извести нова класа (уколико се кључна реч \texttt{final}
  налази у потпису класе).
 	 
-\begin{lstlisting}[frame=single,caption={Ključna reč final }, captionpos=b]
+\begin{lstlisting}[frame=single,caption={Пример са кључном речју final }, captionpos=b]
 struct Base{
     virtual int f(){return 1;}
 };
@@ -1005,7 +1006,7 @@ int func(Derived *d){
  у безимени простор имена [19] (eng. unnamed namespace).
  Овај принцип приказан је у листингу 3.15.
  
- \begin{lstlisting}[frame=single,caption={Unutrašnja vidljivost}, captionpos=b]
+ \begin{lstlisting}[frame=single,caption={Пример са унутрашњом видљивости}, captionpos=b]
 namespace{
 struct Base{
     virtual int f(){return 1;}
@@ -1028,7 +1029,7 @@ struct Derived : Base{
  девиртуализацију агресивније.
  У наставку биће приказан  пример у листингу 3.16, који има само један изворни фајл и 
  његове одговарајуће међурепрезентације у листинзима 3.17 и 3.18.
- \begin{lstlisting}[frame=single,caption={Devirtualizacija primer}, captionpos=b]
+ \begin{lstlisting}[frame=single,caption={Пример девиртуализације}, captionpos=b]
 #include <iostream>
 struct Base
 {
@@ -1052,7 +1053,7 @@ int main()
 }
 \end{lstlisting}
 	
-\begin{lstlisting}[frame=single,caption={Međureprezentacija bez optimizacije celovitog programa }, captionpos=b]
+\begin{lstlisting}[frame=single,caption={Међурепрезентација без оптимизације целовитог програма }, captionpos=b]
 ; Function Attrs: uwtable
 define i32 @_Z1gP7Derived(%struct.Derived*)
  local_unnamed_addr #0 !dbg !964 {
@@ -1085,7 +1086,7 @@ define i32 @main() local_unnamed_addr #5
 }
 \end{lstlisting}
 
-\begin{lstlisting}[frame=single,caption={Međureprezentacija sa optimizacijom celovitog programa }, captionpos=b]
+\begin{lstlisting}[frame=single,caption={Међурепрезентација са оптимизацијом целовитог програма }, captionpos=b]
 ; Function Attrs: norecurse uwtable
 define dso_local i32 @main() local_unnamed_addr #4 !dbg !964 {
   %1 = tail call dereferenceable(272) 
@@ -1254,7 +1255,7 @@ ThinLTO је једноставно активирати, само је потр
 \item kompare -- за графички приказ \textit{diff} фајла
 \end{enumerate}
 
-\begin{lstlisting}[frame=single,caption=Šablon pokretanja alata,captionpos=b]
+\begin{lstlisting}[frame=single,caption=Шаблон покретања алата,captionpos=b]
 python3 main.py -i {putanja_do_foldera_sa_.cpp_fajlovima}
 -o {nivo_optimizacije('0', '1', '2', '3', '4',
                      'z', 'g', 'z', 'fast)}
@@ -1273,11 +1274,11 @@ python3 main.py -i {putanja_do_foldera_sa_.cpp_fajlovima}
  
 Изворни фајлови преводе се на два начина.
 
-\begin{lstlisting}[frame=single, caption=Šablon prevođenja izvornih fajlova sa optimizacijom celovitog programa, captionpos=b]
+\begin{lstlisting}[frame=single, caption=Шаблон превођења изворних фајлова са оптимизацијом целовитог програма, captionpos=b]
 clang++ {source_files} -O{optimization_level} -g -flto -Wl,-plugin-opt=save-temps
 \end{lstlisting}
  
-\begin{lstlisting}[frame=single, caption=Šablon prevođenja izvornih fajlova bez optimizacije celovitog programa, captionpos=b]
+\begin{lstlisting}[frame=single, caption=Шаблон превођења изворних фајлова без оптимизације целовитог програма, captionpos=b]
 wllvm++ -O{optimization_level} -g {source_files}
 \end{lstlisting}
  
@@ -1295,13 +1296,13 @@ wllvm++ -O{optimization_level} -g {source_files}
 Ове информације омогућавају повезивање изворног к\^{o}да и међурерпрезентације.
 Поред инструкције LLVM, за коју постоји дебаг информација, додата је кључна реч
 \texttt{!dbg} поред које стоји број.
-\begin{lstlisting}[frame=single, caption=Primer debug ključne reči, captionpos=b]
+\begin{lstlisting}[frame=single, caption=Пример debug кључне речи, captionpos=b]
   %4 = mul nsw i32 %0, %0, !dbg !974
 \end{lstlisting}
 Унутар међурепрезентације можемо наћи линију текста која даје више информација о
 инструкцијама, то јест повезује их са изворним фајлом.
 За повезивање кључан је број који се налази после \texttt{!dbg}.
-\begin{lstlisting}[frame=single, caption=Primer debug linije koja povezuje izvorni kod sa međureprezentacijom, captionpos=b]
+\begin{lstlisting}[frame=single, caption=Пример debug линије која повезује изворни к\^{o}д са међурепрезентацијом, captionpos=b]
 !974 = !DILocation(line: 8, column: 18, scope: !975)
 \end{lstlisting}
 
@@ -1388,7 +1389,7 @@ int main(){
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=0.8\textwidth]{a_cpp.png}
-  \caption{ Povezivanje linija izvornog koda i međureprezentacije u fajlu a.cpp }
+  \caption{ Повезивање линија изворног к\^{o}да и међурепрезентације у фајлу \textit{а.cpp }  }
   \label{fig:grafikon}
 \end{figure}
 
@@ -1407,7 +1408,7 @@ int main(){
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=0.8\textwidth]{main_cpp.png}
-  \caption{Povezivanje linija izvornog koda i međureprezentacije u fajlu main.cpp  }
+  \caption{Повезивање линија изворног к\^{o}да и међурепрезентације у фајлу \textit{main.cpp } }
   \label{fig:grafikon}
 \end{figure}
 Наравно, више се не приказују мапирања из претходног изворног фајла, већ само из
@@ -1418,13 +1419,13 @@ int main(){
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=0.8\textwidth]{diff_1.png}
-  \caption{Prvi deo diff prikaza neoptimizovane i optimizovane verzije }
+  \caption{Први део \textit{diff} приказа неоптимизоване и оптимизоване верзије }
   \label{fig:grafikon}
 \end{figure}
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=0.8\textwidth]{diff_2.png}
-  \caption{Drugi deo diff prikaza neoptimizovane i optimizovane verzije }
+  \caption{Други део \textit{diff} приказа неоптимизоване и оптимизоване верзије}
   \label{fig:grafikon}
 \end{figure}
 
