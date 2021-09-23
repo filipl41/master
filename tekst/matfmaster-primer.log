@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2021.9.4)  22 SEP 2021 15:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2021.9.4)  23 SEP 2021 00:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1632,22 +1632,22 @@ Package csquotes Info: Deallocating character " on input line 1411.
 (/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
 File: utf8.def 2017/01/28 v1.1t UTF-8 support for inputenc
 )
-<a_cpp.png, id=789, 1859.94875pt x 1056.94875pt>
+<a_cpp.png, id=790, 1859.94875pt x 1056.94875pt>
 File: a_cpp.png Graphic file (type png)
 <use a_cpp.png>
 Package pdftex.def Info: a_cpp.png  used on input line 1434.
 (pdftex.def)             Requested size: 340.8013pt x 193.66164pt.
-<main_cpp.png, id=790, 1859.94875pt x 1056.94875pt>
+<main_cpp.png, id=791, 1859.94875pt x 1056.94875pt>
 File: main_cpp.png Graphic file (type png)
 <use main_cpp.png>
 Package pdftex.def Info: main_cpp.png  used on input line 1453.
 (pdftex.def)             Requested size: 340.8013pt x 193.66164pt.
-<diff_1.png, id=791, 1842.885pt x 683.55376pt>
+<diff_1.png, id=792, 1842.885pt x 683.55376pt>
 File: diff_1.png Graphic file (type png)
 <use diff_1.png>
 Package pdftex.def Info: diff_1.png  used on input line 1464.
 (pdftex.def)             Requested size: 340.8013pt x 126.4033pt.
-<diff_2.png, id=792, 1852.9225pt x 665.48625pt>
+<diff_2.png, id=793, 1852.9225pt x 665.48625pt>
 File: diff_2.png Graphic file (type png)
 <use diff_2.png>
 Package pdftex.def Info: diff_2.png  used on input line 1470.
@@ -1871,7 +1871,7 @@ lip/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx1440.600pk> </home/fil
 ip/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1440.600pk> </home/fili
 p/.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm2074.600pk> </home/filip
 /.texlive2017/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1728.600pk>
-Output written on matfmaster-primer.pdf (48 pages, 1723992 bytes).
+Output written on matfmaster-primer.pdf (48 pages, 1723973 bytes).
 PDF statistics:
  1712 PDF objects out of 1728 (max. 8388607)
  952 compressed objects within 10 object streams
